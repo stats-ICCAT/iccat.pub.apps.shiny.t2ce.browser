@@ -3,39 +3,44 @@
 } 
 
 #filtered_data_container table thead tr th:nth-child(1),
-#filtered_data_container table thead tr th:nth-child(4),
-#filtered_data_container table thead tr th:nth-child(5) {
-  min-width: 70px;
-}
-
 #filtered_data_container table thead tr th:nth-child(2) {
-  min-width: 150px;
-}
-
-#filtered_data_container table thead tr th:nth-child(3) {
-  min-width: 100px;
-}
-
-#filtered_data_container table thead tr th:nth-child(12),
-#filtered_data_container table thead tr th:nth-child(14),
-#filtered_data_container table thead tr th:nth-child(16) {
   min-width: 50px;
 }
 
-#filtered_data_container table thead tr th:nth-child(13),
-#filtered_data_container table thead tr th:nth-child(15) {
+#filtered_data_container table thead tr th:nth-child(3),
+#filtered_data_container table thead tr th:nth-child(6),
+#filtered_data_container table thead tr th:nth-child(7) {
+  min-width: 70px;
+}
+
+#filtered_data_container table thead tr th:nth-child(4) {
+  min-width: 150px;
+}
+
+#filtered_data_container table thead tr th:nth-child(5) {
+  min-width: 100px;
+}
+
+#filtered_data_container table thead tr th:nth-child(14),
+#filtered_data_container table thead tr th:nth-child(16),
+#filtered_data_container table thead tr th:nth-child(18) {
+  min-width: 50px;
+}
+
+#filtered_data_container table thead tr th:nth-child(15),
+#filtered_data_container table thead tr th:nth-child(17) {
   min-width: 60px;
 }
 
-#filtered_data_container table tbody tr td:nth-child(1),
-#filtered_data_container table tbody tr td:nth-child(4),
-#filtered_data_container table tbody tr td:nth-child(5),
+#filtered_data_container table tbody tr td:nth-child(3),
 #filtered_data_container table tbody tr td:nth-child(6),
 #filtered_data_container table tbody tr td:nth-child(7),
 #filtered_data_container table tbody tr td:nth-child(8),
-#filtered_data_container table tbody tr td:nth-child(13),
+#filtered_data_container table tbody tr td:nth-child(9),
+#filtered_data_container table tbody tr td:nth-child(10),
 #filtered_data_container table tbody tr td:nth-child(15),
-#filtered_data_container table tbody tr td:nth-child(16) {
+#filtered_data_container table tbody tr td:nth-child(17),
+#filtered_data_container table tbody tr td:nth-child(18) {
   text-align: center !important;
 }
 

@@ -42,6 +42,18 @@ ui = function() {
               fluidRow(
                 column(
                   width = 12,
+                  virtualSelectInput("datasetTypes", "Dataset type(s)",
+                                     width = "100%",
+                                     multiple = TRUE,
+                                     autoSelectFirstOption = FALSE,
+                                     choices = ALL_DATASET_TYPES,
+                                     search = TRUE,
+                                     showValueAsTags = TRUE)
+                )
+              ),
+              fluidRow(
+                column(
+                  width = 12,
                   virtualSelectInput("flags", "Flag(s)",
                                      width = "100%",
                                      multiple = TRUE,
@@ -59,6 +71,18 @@ ui = function() {
                                      multiple = TRUE,
                                      autoSelectFirstOption = FALSE,
                                      choices = ALL_GEAR_GROUPS,
+                                     search = TRUE,
+                                     showValueAsTags = TRUE)
+                )
+              ),
+              fluidRow(
+                column(
+                  width = 12,
+                  virtualSelectInput("timePeriods", "Time period(s)",
+                                     width = "100%",
+                                     multiple = TRUE,
+                                     autoSelectFirstOption = FALSE,
+                                     choices = ALL_TIME_PERIODS,
                                      search = TRUE,
                                      showValueAsTags = TRUE)
                 )

@@ -16,13 +16,18 @@ options(scipen = 9999)
 # THIS IS ***FUNDAMENTAL*** TO HAVE THE DOCKER CONTAINER CORRECTLY LOAD THE .RData FILE WITH THE ORIGINAL UTF-8 ENCODING
 Sys.setlocale(category = "LC_ALL", locale = "en_US.UTF-8")
 
-ALL_FLAGS       = setNames(as.character(REF_FLAGS$CODE),       paste(REF_FLAGS$CODE,       "-", REF_FLAGS$NAME_EN))
-ALL_GEAR_GROUPS = setNames(as.character(REF_GEAR_GROUPS$CODE), paste(REF_GEAR_GROUPS$CODE, "-", REF_GEAR_GROUPS$NAME_EN))
+load("./REF_TIME_PERIODS.RData")
+load("./CE_w.RData")
+
+ALL_FLAGS        = setNames(as.character(REF_FLAGS$CODE),        paste0(REF_FLAGS$CODE,        " - ", REF_FLAGS$NAME_EN))
+ALL_GEAR_GROUPS  = setNames(as.character(REF_GEAR_GROUPS$CODE),  paste0(REF_GEAR_GROUPS$CODE,  " - ", REF_GEAR_GROUPS$NAME_EN))
+ALL_TIME_PERIODS = setNames(REF_TIME_PERIODS$CODE,               paste0(REF_TIME_PERIODS$CODE, " - ", REF_TIME_PERIODS$NAME_EN, " (", REF_TIME_PERIODS$TYPE_CODE, ")"))
 #ALL_GEARS       = setNames(as.character(REF_GEARS$CODE),       paste(REF_GEARS$CODE,       "-", REF_GEARS$NAME_EN))
 
-set_log_level(LOG_INFO)
+ALL_DATASET_TYPES  = setNames(c("..", "n.", ".w", "nw"), 
+                              c(".. (efforts only)", "n. (catches in numbers only)", ".w (catches in weights only)", "nw (catches in numbers and weights)"))
 
-load("./CE_w.RData")
+set_log_level(LOG_INFO)
 
 MIN_YEAR = 1950 #min(CA_ALL$Year)
 MAX_YEAR = max(CE_w$YEAR)

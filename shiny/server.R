@@ -1,13 +1,24 @@
 server = function(input, output, session) {
   filter_ce_data = reactive({
     DEBUG("CD")
-    INFO(paste0("Flags      : ", paste0(input$flags,      collapse = ", ")))
-    INFO(paste0("Gear groups: ", paste0(input$gearGroups, collapse = ", ")))
-    #INFO(paste0("Gears      : ", paste0(input$gears,       collapse = ", ")))
-    
+    INFO(paste0("Years         : ", paste0(input$years,        collapse = "-")))
+    INFO(paste0("Dataset types : ", paste0(input$datasetTypes, collapse = ", ")))
+    INFO(paste0("Flags         : ", paste0(input$flags,        collapse = ", ")))
+    INFO(paste0("Gear groups   : ", paste0(input$gearGroups,   collapse = ", ")))
+    INFO(paste0("Time periods  : ", paste0(input$timePeriods,  collapse = ", ")))
+
     start = Sys.time()
      
     filtered_CE = CE_w
+
+    first_year = input$years[1]
+    last_year  = input$years[2]
+    
+    filtered_CE = filtered_CE[YEAR >= first_year & YEAR <= last_year]
+    
+    if(!is.null(input$datasetTypes)) {
+      filtered_CE = filtered_CE[DATASET_TYPE_CODE_CALC %in% input$datasetTypes]
+    }
     
     if(!is.null(input$flags)) {
       filtered_CE = filtered_CE[FLAG_CODE %in% input$flags]
@@ -17,14 +28,9 @@ server = function(input, output, session) {
       filtered_CE = filtered_CE[GEAR_GROUP_CODE %in% input$gearGroups]
     }
     
-    #if(!is.null(input$gears)) {
-    #  filtered_CE = filtered_CE[GEAR_CODE %in% input$gears]
-    #}
-    
-    first_year = input$years[1]
-    last_year  = input$years[2]
-    
-    filtered_CE = filtered_CE[YEAR >= first_year & YEAR <= last_year]
+    if(!is.null(input$timePeriods)) {
+      filtered_CE = filtered_CE[TIME_PERIOD_CODE %in% input$timePeriods]
+    }
 
     end = Sys.time()
     
@@ -33,13 +39,14 @@ server = function(input, output, session) {
     INFO(paste0("Filtered data size: ", nrow(filtered_CE)))
 
     return(
-      filtered_CE[, .(DATASET_TYPE_CODE,
+      filtered_CE[, .(DATASET_ID, STRATA_ID,
+                      DATASET_TYPE_CODE = DATASET_TYPE_CODE_CALC,
                       FLAG_NAME_EN,
                       FLEET_CODE,
                       GEAR_GROUP_CODE,
                       GEAR_CODE,
                       YEAR,
-                      TIME_CODE,
+                      TIME_PERIOD_CODE, 
                       SQUARE_TYPE_CODE,
                       QUADRANT_CODE,
                       LAT,
@@ -73,7 +80,8 @@ server = function(input, output, session) {
         ),
         selection = "none",
         rownames = FALSE,
-        colnames = c("Dataset type", 
+        colnames = c("Dataset ID", "Strata ID",
+                     "Dataset type", 
                      "Flag", "Fleet code", 
                      "Gear group", "Gear code",
                      "Year", "Time",
@@ -91,15 +99,24 @@ server = function(input, output, session) {
                      "oTun",
                      "BSH", "POR", "SMA",
                      "oSks")
-      ) %>% DT::formatCurrency(columns = c(12, 14, 17:51), currency = "")
+      ) %>% DT::formatCurrency(columns = c(14, 16, 19:53), currency = "")
     )
       #%>% DT::formatCurrency(columns = c(13, 15, 18:52), currency = "")
 
   output$downloadData = downloadHandler(
   filename = function() {
-      components = c(paste0(input$flags,      collapse = "+"),
-                     paste0(input$gearGroups, collapse = "+"),
-                     paste0(input$years,      collapse = "-"))
+      dataset_types = paste0(input$datasetTypes, collapse = "+")
+      
+      dataset_types = str_replace_all(dataset_types, "\\.\\.", "EF")
+      dataset_types = str_replace_all(dataset_types, "n\\.",   "N")
+      dataset_types = str_replace_all(dataset_types, "\\.w",   "W")
+      dataset_types = str_replace_all(dataset_types, "nw",     "NW")
+    
+      components = c(paste0(input$flags,        collapse = "+"),
+                     paste0(input$gearGroups,   collapse = "+"),
+                     paste0(input$timePeriods,  collapse = "+"),
+                     paste0(dataset_types,      collapse = "+"),
+                     paste0(input$years,        collapse = "-"))
       
       components = components[which(components != "")]
       
