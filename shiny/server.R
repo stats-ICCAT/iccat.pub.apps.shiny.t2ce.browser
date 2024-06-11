@@ -5,6 +5,7 @@ server = function(input, output, session) {
     INFO(paste0("Dataset types : ", paste0(input$datasetTypes, collapse = ", ")))
     INFO(paste0("Flags         : ", paste0(input$flags,        collapse = ", ")))
     INFO(paste0("Gear groups   : ", paste0(input$gearGroups,   collapse = ", ")))
+    INFO(paste0("Fishing modes : ", paste0(input$fishingModes, collapse = ", ")))
     INFO(paste0("Time periods  : ", paste0(input$timePeriods,  collapse = ", ")))
 
     start = Sys.time()
@@ -27,6 +28,10 @@ server = function(input, output, session) {
     if(!is.null(input$gearGroups)) {
       filtered_CE = filtered_CE[GEAR_GROUP_CODE %in% input$gearGroups]
     }
+
+    if(!is.null(input$fishingModes)) {
+      filtered_CE = filtered_CE[FISHING_MODE_CODE %in% input$fishingModes]
+    }
     
     if(!is.null(input$timePeriods)) {
       filtered_CE = filtered_CE[TIME_PERIOD_CODE %in% input$timePeriods]
@@ -45,16 +50,11 @@ server = function(input, output, session) {
                       FLEET_CODE,
                       GEAR_GROUP_CODE,
                       GEAR_CODE,
-                      YEAR,
-                      TIME_PERIOD_CODE, 
-                      SQUARE_TYPE_CODE,
-                      QUADRANT_CODE,
-                      LAT,
-                      LON,
-                      PRIMARY_EFFORT,
-                      PRIMARY_EFFORT_UNIT_CODE,
-                      SECONDARY_EFFORT,
-                      SECONDARY_EFFORT_UNIT_CODE,
+                      YEAR, TIME_PERIOD_CODE, 
+                      SQUARE_TYPE_CODE, QUADRANT_CODE, LAT, LON,
+                      FISHING_MODE_CODE,
+                      PRIMARY_EFFORT, PRIMARY_EFFORT_UNIT_CODE,
+                      SECONDARY_EFFORT, SECONDARY_EFFORT_UNIT_CODE,
                       CATCH_UNIT_CODE,
                       BFT, ALB,
                       YFT, BET, SKJ,
@@ -86,6 +86,7 @@ server = function(input, output, session) {
                      "Gear group", "Gear code",
                      "Year", "Time",
                      "Square", "Quad", "Lat", "Lon",
+                     "Fishing mode",
                      "Effort (1)", "E. type (1)",
                      "Effort (2)", "E. type (2)",
                      "Catch unit",
@@ -99,7 +100,7 @@ server = function(input, output, session) {
                      "oTun",
                      "BSH", "POR", "SMA",
                      "oSks")
-      ) %>% DT::formatCurrency(columns = c(14, 16, 19:53), currency = "")
+      ) %>% DT::formatCurrency(columns = c(15, 17, 20:54), currency = "")
     )
       #%>% DT::formatCurrency(columns = c(13, 15, 18:52), currency = "")
 
@@ -114,6 +115,7 @@ server = function(input, output, session) {
     
       components = c(paste0(input$flags,        collapse = "+"),
                      paste0(input$gearGroups,   collapse = "+"),
+                     paste0(input$fishingModes, collapse = "+"),
                      paste0(input$timePeriods,  collapse = "+"),
                      paste0(dataset_types,      collapse = "+"),
                      paste0(input$years,        collapse = "-"))

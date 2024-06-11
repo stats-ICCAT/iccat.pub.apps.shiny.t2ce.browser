@@ -78,6 +78,18 @@ ui = function() {
               fluidRow(
                 column(
                   width = 12,
+                  virtualSelectInput("fishingModes", "Fishing mode(s)",
+                                     width = "100%",
+                                     multiple = TRUE,
+                                     autoSelectFirstOption = FALSE,
+                                     choices = ALL_FISHING_MODES,
+                                     search = TRUE,
+                                     showValueAsTags = TRUE)
+                )
+              ),
+              fluidRow(
+                column(
+                  width = 12,
                   virtualSelectInput("timePeriods", "Time period(s)",
                                      width = "100%",
                                      multiple = TRUE,

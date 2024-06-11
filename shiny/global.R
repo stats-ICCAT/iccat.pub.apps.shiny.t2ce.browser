@@ -27,6 +27,10 @@ ALL_TIME_PERIODS = setNames(REF_TIME_PERIODS$CODE,               paste0(REF_TIME
 ALL_DATASET_TYPES  = setNames(c("..", "n.", ".w", "nw"), 
                               c(".. (efforts only)", "n. (catches in numbers only)", ".w (catches in weights only)", "nw (catches in numbers and weights)"))
 
+ALL_FISHING_MODES  = setNames(c("FS", "LS", "UNK"), 
+                              c("FS - Free-swimming schools", "LS - Log-associated schools", "UNK - Unknown / Unavailable"))
+
+
 set_log_level(LOG_INFO)
 
 MIN_YEAR = 1950 #min(CA_ALL$Year)

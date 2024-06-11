@@ -129,7 +129,7 @@ CE_CA_w =
     fun.aggregate = sum,
     drop = c(TRUE, FALSE),
     value.var = "CATCH",
-    fill = 0
+    fill = NA
   )
 
 # Attaches effort and strata columns to the wide catch records
@@ -153,10 +153,9 @@ CE_w = CE_w[, .(DATASET_ID, STRATA_ID, DATASET_TYPE_CODE_DEFAULT, DATASET_TYPE_C
                 GEAR_GROUP_CODE, GEAR_CODE, 
                 TIME_PERIOD_CODE, TIME_PERIOD_TYPE_CODE, YEAR, MONTH_START, MONTH_END,
                 SQUARE_TYPE_CODE, QUADRANT_CODE, LAT, LON, CWP_GRID_CODE,
-                PRIMARY_EFFORT,
-                PRIMARY_EFFORT_UNIT_CODE,
-                SECONDARY_EFFORT,
-                SECONDARY_EFFORT_UNIT_CODE,
+                FISHING_MODE_CODE,
+                PRIMARY_EFFORT, PRIMARY_EFFORT_UNIT_CODE,
+                SECONDARY_EFFORT, SECONDARY_EFFORT_UNIT_CODE,
                 CATCH_UNIT_CODE,
                 BFT, ALB,
                 YFT, BET, SKJ,
