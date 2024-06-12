@@ -121,9 +121,58 @@ ui = function() {
                 column(
                   width = 12,
                   hr(),
-                  strong("Download: "),
-                  downloadButton("downloadFiltered", "Filtered data"),
-                  downloadButton("downloadAll",      "All data")
+                  h4(strong("Download (.csv.gz)"))
+                )
+              ),
+              fluidRow(
+                div(
+                  style = "margin-top: 1em",
+                  column(
+                    width = 4,
+                    strong("Data:")
+                  ),
+                  column(
+                    width = 4,
+                    downloadButton("downloadDataFiltered", "Filtered", style = "width: 100px")
+                  ),
+                  column(
+                    width = 4,
+                    downloadButton("downloadDataAll", "All", style = "width: 100px")
+                  )
+                )
+              ),
+              fluidRow(
+                div(
+                  style = "margin-top: 1em",
+                  column(
+                    width = 4,
+                    strong("Summary:")
+                  ),
+                  column(
+                    width = 4,
+                    downloadButton("downloadSummaryFiltered", "Filtered", style = "width: 100px")
+                  ),
+                  column(
+                    width = 4,
+                    downloadButton("downloadSummaryAll", "All", style = "width: 100px")
+                  )
+                )
+              ),
+              fluidRow(
+                div(
+                  style = "margin-top: 1em",
+                  column(
+                    width = 4,
+                    strong("Detailed summary:")
+                  ),
+                  column(
+                    width = 4,
+                    downloadButton("downloadDetailedSummaryFiltered", "Filtered", style = "width: 100px")
+                  ),
+                  column(
+                    width = 4,
+                    downloadButton("downloadDetailedSummaryAll", "All", style = "width: 100px")
+                  )
                 )
               )
             ),

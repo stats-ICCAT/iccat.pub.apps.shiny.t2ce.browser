@@ -1,6 +1,21 @@
 server = function(input, output, session) {
+  EMPTY_FILTER = 
+    list(years = c(),
+         datasetTypes = c(),
+         catchUnits = c(),
+         flags = c(),
+         gearGroups = c(),
+         fishingModes = c(),
+         timePeriods = c()
+    )
+  
   filter_ce_data = reactive({
-    DEBUG("CD")
+    return(
+      filter_ce_data_(input)
+    )
+  })
+  
+  filter_ce_data_ = function(input = EMPTY_FILTER) {
     INFO(paste0("Years         : ", paste0(input$years,        collapse = "-")))
     INFO(paste0("Dataset types : ", paste0(input$datasetTypes, collapse = ", ")))
     INFO(paste0("Catch units   : ", paste0(input$catchUnits,   collapse = ", ")))
@@ -75,10 +90,15 @@ server = function(input, output, session) {
     validate(need(nrow(filtered) > 0, "Current filtering criteria do not identify any valid record!"))
     
     return(filtered)
-  })
+  }
   
   filter_summary_data = reactive({
-    DEBUG("CD")
+    return(
+      filter_summary_data_(input, TRUE)
+    )
+  })
+  
+  filter_summary_data_ = function(input = EMPTY_FILTER, use_symbols = FALSE) {
     INFO(paste0("Years         : ", paste0(input$years,        collapse = "-")))
     INFO(paste0("Dataset types : ", paste0(input$datasetTypes, collapse = ", ")))
     INFO(paste0("Catch units   : ", paste0(input$catchUnits,   collapse = ", ")))
@@ -91,10 +111,17 @@ server = function(input, output, session) {
     
     filtered_CE = CE
     
-    first_year = input$years[1]
-    last_year  = input$years[2]
+    has_years = length(input$years == 2)
     
-    filtered_CE = filtered_CE[YEAR >= first_year & YEAR <= last_year]
+    if(has_years) {
+      first_year = input$years[1]
+      last_year  = input$years[2]
+      
+      filtered_CE = filtered_CE[YEAR >= first_year & YEAR <= last_year]
+    } else {
+      first_year = min(filtered_CE$YEAR)
+      last_year  = max(filtered_CE$YEAR)
+    }
     
     if(!is.null(input$datasetTypes)) {
       filtered_CE = filtered_CE[DATASET_TYPE_CODE_CALC %in% input$datasetTypes]
@@ -132,7 +159,7 @@ server = function(input, output, session) {
                                                                    CATCH_UNIT_CODE, 
                                                                    DATASET_TYPE_CODE_CALC, 
                                                                    YEAR_SHORT)][CATCH > 0]
-
+    
     validate(need(nrow(filtered)  > 0,    "Current filtering criteria do not identify any valid record!"))
     
     FILTERED_YEAR_SHORTS = lapply(first_year:last_year, function(y) { return (str_sub(as.character(y), 3, 4) ) })
@@ -153,22 +180,27 @@ server = function(input, output, session) {
       )
     
     filtered = filtered[, .(FLAG_NAME_EN = NAME_EN, GEAR_GROUP_CODE, CATCH_UNIT_CODE, DATASET_TYPE_CODE_CALC, YEAR_SHORT, CATCH)]
-  
+    
     filtered_w =
       dcast.data.table(
         filtered,
         FLAG_NAME_EN + GEAR_GROUP_CODE + CATCH_UNIT_CODE + DATASET_TYPE_CODE_CALC ~ YEAR_SHORT,
-        fun.aggregate = function(v) { return ("✅")},
+        fun.aggregate = function(v) { return (ifelse(use_symbols, "✅", "#")) },
         drop = c(TRUE, FALSE),
         value.var = "CATCH",
-        fill = "▢"
+        fill = ifelse(use_symbols, "▢", "")
       )
     
     return(filtered_w)
-  })
+  }
   
   filter_detailed_summary_data = reactive({
-    DEBUG("CD")
+    return(
+      filter_detailed_summary_data_(input, TRUE)
+    )
+  })
+  
+  filter_detailed_summary_data_ = function(input = EMPTY_FILTER, use_symbols = FALSE) {
     INFO(paste0("Years         : ", paste0(input$years,        collapse = "-")))
     INFO(paste0("Dataset types : ", paste0(input$datasetTypes, collapse = ", ")))
     INFO(paste0("Catch units   : ", paste0(input$catchUnits,   collapse = ", ")))
@@ -181,11 +213,18 @@ server = function(input, output, session) {
     
     filtered_CE = CE
     
-    first_year = input$years[1]
-    last_year  = input$years[2]
+    has_years = length(input$years == 2)
     
-    filtered_CE = filtered_CE[YEAR >= first_year & YEAR <= last_year]
-    
+    if(has_years) {
+      first_year = input$years[1]
+      last_year  = input$years[2]
+      
+      filtered_CE = filtered_CE[YEAR >= first_year & YEAR <= last_year]
+    } else {
+      first_year = min(filtered_CE$YEAR)
+      last_year  = max(filtered_CE$YEAR)
+    }
+
     if(!is.null(input$datasetTypes)) {
       filtered_CE = filtered_CE[DATASET_TYPE_CODE_CALC %in% input$datasetTypes]
     }
@@ -224,11 +263,11 @@ server = function(input, output, session) {
                                                                    PRIMARY_EFFORT_UNIT_CODE, 
                                                                    SECONDARY_EFFORT_UNIT_CODE, 
                                                                    CATCH_UNIT_CODE, 
-                                                          DATASET_TYPE_CODE_CALC, 
-                                                          YEAR_SHORT)][CATCH > 0]
-
+                                                                   DATASET_TYPE_CODE_CALC, 
+                                                                   YEAR_SHORT)][CATCH > 0]
+    
     validate(need(nrow(filtered)  > 0,    "Current filtering criteria do not identify any valid record!"))
-
+    
     FILTERED_YEAR_SHORTS = lapply(first_year:last_year, function(y) { return (str_sub(as.character(y), 3, 4) ) })
     
     filtered$YEAR_SHORT =
@@ -243,14 +282,14 @@ server = function(input, output, session) {
       dcast.data.table(
         filtered,
         FLEET_CODE + GEAR_CODE + TIME_PERIOD_TYPE_CODE + SQUARE_TYPE_CODE + PRIMARY_EFFORT_UNIT_CODE + SECONDARY_EFFORT_UNIT_CODE + CATCH_UNIT_CODE + DATASET_TYPE_CODE_CALC ~ YEAR_SHORT,
-        fun.aggregate = function(v) { return ("✅")},
+        fun.aggregate = function(v) { return (ifelse(use_symbols, "✅", "#")) },
         drop = c(TRUE, FALSE),
         value.var = "CATCH",
-        fill = "▢"
+        fill = ifelse(use_symbols, "▢", "")
       )
-     
+    
     return(filtered_w)
-  })
+  }
   
   output$filtered_data =
     renderDataTable(
@@ -330,7 +369,7 @@ server = function(input, output, session) {
       )
     })
 
-  output$downloadFiltered = downloadHandler(
+  output$downloadDataFiltered = downloadHandler(
     filename = function() {
         dataset_types = paste0(input$datasetTypes, collapse = "+")
         
@@ -358,7 +397,7 @@ server = function(input, output, session) {
       }
   )
   
-  output$downloadAll = downloadHandler(
+  output$downloadDataAll = downloadHandler(
     filename = function() {
       return(META$FILENAME)
     },
@@ -367,5 +406,81 @@ server = function(input, output, session) {
     }
   )
   
-  output
+  output$downloadSummaryFiltered = downloadHandler(
+    filename = function() {
+      dataset_types = paste0(input$datasetTypes, collapse = "+")
+      
+      dataset_types = str_replace_all(dataset_types, "\\.\\.", "EF")
+      dataset_types = str_replace_all(dataset_types, "n\\.",   "N")
+      dataset_types = str_replace_all(dataset_types, "\\.w",   "W")
+      dataset_types = str_replace_all(dataset_types, "nw",     "NW")
+      
+      components = c(paste0(input$flags,        collapse = "+"),
+                     paste0(input$gearGroups,   collapse = "+"),
+                     paste0(input$fishingModes, collapse = "+"),
+                     paste0(input$timePeriods,  collapse = "+"),
+                     paste0(dataset_types,      collapse = "+"),
+                     paste0(input$catchUnits,   collapse = "+"),
+                     paste0(input$years,        collapse = "-"))
+      
+      components = components[which(components != "")]
+      
+      paste0("T2CE_summary_", paste0(components, collapse = "_"), ".csv.gz")
+    },
+    content = function(file) {
+      to_download = filter_summary_data_(input, FALSE)
+      
+      write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
+    }
+  )
+  
+  output$downloadSummaryAll = downloadHandler(
+    filename = function() {
+      return(paste0("T2CE_summary_all_", str_replace_all(META$LAST_UPDATE, "\\-", ""), ".csv.gz"))
+    },
+    content = function(file) {
+      to_download = filter_summary_data_(EMPTY_FILTER, FALSE)
+      
+      write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
+    }
+  )
+  
+  output$downloadDetailedSummaryFiltered = downloadHandler(
+    filename = function() {
+      dataset_types = paste0(input$datasetTypes, collapse = "+")
+      
+      dataset_types = str_replace_all(dataset_types, "\\.\\.", "EF")
+      dataset_types = str_replace_all(dataset_types, "n\\.",   "N")
+      dataset_types = str_replace_all(dataset_types, "\\.w",   "W")
+      dataset_types = str_replace_all(dataset_types, "nw",     "NW")
+      
+      components = c(paste0(input$flags,        collapse = "+"),
+                     paste0(input$gearGroups,   collapse = "+"),
+                     paste0(input$fishingModes, collapse = "+"),
+                     paste0(input$timePeriods,  collapse = "+"),
+                     paste0(dataset_types,      collapse = "+"),
+                     paste0(input$catchUnits,   collapse = "+"),
+                     paste0(input$years,        collapse = "-"))
+      
+      components = components[which(components != "")]
+      
+      paste0("T2CE_detailed_summary_", paste0(components, collapse = "_"), ".csv.gz")
+    },
+    content = function(file) {
+      to_download = filter_detailed_summary_data_(input, FALSE)
+      
+      write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
+    }
+  )
+  
+  output$downloadDetailedSummaryAll = downloadHandler(
+    filename = function() {
+      return(paste0("T2CE_detailed_summary_all_", str_replace_all(META$LAST_UPDATE, "\\-", ""), ".csv.gz"))
+    },
+    content = function(file) {
+      to_download = filter_detailed_summary_data_(EMPTY_FILTER, FALSE)
+      
+      write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
+    }
+  )
 }
