@@ -1,4 +1,6 @@
 server = function(input, output, session) {
+  INITIAL_NUM_ENTRIES = 50
+  
   EMPTY_FILTER = 
     list(years = c(),
          datasetTypes = c(),
@@ -85,7 +87,8 @@ server = function(input, output, session) {
                       SBF, 
                       oTun,
                       BSH, POR, SMA, 
-                      oSks)]
+                      oSks, 
+                      oFis)]
     
     validate(need(nrow(filtered) > 0, "Current filtering criteria do not identify any valid record!"))
     
@@ -296,7 +299,7 @@ server = function(input, output, session) {
       DT::datatable(
         filter_ce_data(),
         options = list(
-          pageLength = 30, 
+          pageLength = INITIAL_NUM_ENTRIES, 
           autoWidth = TRUE,
           scrollX = TRUE
         ),
@@ -305,7 +308,7 @@ server = function(input, output, session) {
         colnames = c("Dataset ID", "Strata ID",
                      "Dataset type", 
                      "Flag", "Fleet code", 
-                     "Gear group", "Gear code",
+                     "Gear group", "Gear",
                      "Year", "Time",
                      "Square", "Quad", "Lat", "Lon",
                      "Fishing mode",
@@ -321,8 +324,9 @@ server = function(input, output, session) {
                      "SBF",
                      "oTun",
                      "BSH", "POR", "SMA",
-                     "oSks")
-      ) %>% DT::formatCurrency(columns = c(15, 17, 20:54), currency = "")
+                     "oSks",
+                     "oFis")
+      ) %>% DT::formatCurrency(columns = c(15, 17, 20:55), currency = "")
     )
   
   output$summary_data =
@@ -332,7 +336,7 @@ server = function(input, output, session) {
       DT::datatable(
         filtered_data,
         options = list(
-          pageLength = 30, 
+          pageLength = INITIAL_NUM_ENTRIES, 
           autoWidth = TRUE,
           scrollX = TRUE
         ),
@@ -341,7 +345,7 @@ server = function(input, output, session) {
         colnames = c("Flag code", 
                      "Gear group",
                      "Catch unit",
-                     "DS type",
+                     "Dataset type",
                      colnames(filtered_data[, 5:ncol(filtered_data)]))
       )
     })
@@ -353,7 +357,7 @@ server = function(input, output, session) {
       DT::datatable(
         filtered_data,
         options = list(
-          pageLength = 30, 
+          pageLength = INITIAL_NUM_ENTRIES, 
           autoWidth = TRUE,
           scrollX = TRUE
         ),
@@ -364,7 +368,7 @@ server = function(input, output, session) {
                      "Time", "Geo",
                      "Effort unit #1", "Effort unit #2",
                      "Catch unit",
-                     "DS type",
+                     "Dataset type",
                      colnames(filtered_data[, 9:ncol(filtered_data)]))
       )
     })

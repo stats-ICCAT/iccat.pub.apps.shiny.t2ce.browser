@@ -5,9 +5,11 @@
   padding-top: 1em;
 } 
 
+#filtered_data_container table thead tr th,
 #filtered_data_container table tbody tr td {
-  padding-top: 3px !important;
-  padding-bottom: 3px !important;
+  padding-top: 2px !important;
+  padding-bottom: 1px !important;
+  line-height: 1em;
 }
 
 #filtered_data_container table thead tr th:nth-child(1),
@@ -15,10 +17,15 @@
   min-width: 50px;
 }
 
-#filtered_data_container table thead tr th:nth-child(3),
-#filtered_data_container table thead tr th:nth-child(6),
 #filtered_data_container table thead tr th:nth-child(7),
-#filtered_data_container table thead tr th:nth-child(14){
+#filtered_data_container table tbody tr td:nth-child(7) {
+  min-width: 40px;
+}
+
+/* #filtered_data_container table thead tr th:nth-child(3), */
+/* #filtered_data_container table thead tr th:nth-child(6), */
+/* #filtered_data_container table thead tr th:nth-child(7), */
+#filtered_data_container table thead tr th:nth-child(14) {
   min-width: 70px;
 }
 
@@ -63,8 +70,9 @@
 
 #filtered_summary_container table thead tr th, 
 #filtered_summary_container table tbody tr td {
-  padding-top: 3px !important;
-  padding-bottom: 3px !important;
+  padding-top: 2px !important;
+  padding-bottom: 1px !important;
+  line-height: 1em;
 }
 
 #filtered_summary_container .dataTables_scrollBody table {
@@ -101,8 +109,9 @@
 
 #filtered_detailed_summary_container table thead tr th, 
 #filtered_detailed_summary_container table tbody tr td {
-  padding-top: 3px !important;
-  padding-bottom: 3px !important;
+  padding-top: 2px !important;
+  padding-bottom: 1px !important;
+  line-height: 1em;
 }
 
 #filtered_detailed_summary_container .dataTables_scrollBody table {
