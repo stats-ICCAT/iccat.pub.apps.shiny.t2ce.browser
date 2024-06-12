@@ -39,7 +39,7 @@ ENV _R_SHLIB_STRIP_=true
 ENV GITLAB_AUTH_TOKEN=$GITLAB_AUTH_TOKEN
 
 # Copies the entire structure of the Shiny app under a dedicated folder
-COPY ./shiny ce_browser
+COPY ./shiny interactive_ce_browser
 
 # Updates the R libs
 RUN Rscript update_libs.R

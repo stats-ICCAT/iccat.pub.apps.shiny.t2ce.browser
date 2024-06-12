@@ -43,7 +43,7 @@ ARG GITLAB_AUTH_TOKEN
 ENV GITLAB_AUTH_TOKEN=$GITLAB_AUTH_TOKEN
 
 # Copies the entire structure of the Shiny app under a dedicated folder
-COPY ./shiny ce_browser
+COPY ./shiny interactive_ce_browser
 
 # Updates the R libs
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
