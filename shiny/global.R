@@ -9,9 +9,6 @@ library(shinyWidgets)
 library(shinycssloaders)
 library(DT)
 
-library(flextable)
-library(officer)
-
 options(scipen = 9999)
 
 # THIS IS ***FUNDAMENTAL*** TO HAVE THE DOCKER CONTAINER CORRECTLY LOAD THE .RData FILE WITH THE ORIGINAL UTF-8 ENCODING
