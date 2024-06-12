@@ -342,7 +342,7 @@ server = function(input, output, session) {
         ),
         selection = "none",
         rownames = FALSE,
-        colnames = c("Flag code", 
+        colnames = c("Flag", 
                      "Gear group",
                      "Catch unit",
                      "Dataset type",
