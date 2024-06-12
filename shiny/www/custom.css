@@ -1,6 +1,14 @@
+/* DATA */
+
 #filtered_data_container {
   font-size: x-small;
+  padding-top: 1em;
 } 
+
+#filtered_data_container table tbody tr td {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
 
 #filtered_data_container table thead tr th:nth-child(1),
 #filtered_data_container table thead tr th:nth-child(2) {
@@ -44,6 +52,87 @@
 #filtered_data_container table tbody tr td:nth-child(18),
 #filtered_data_container table tbody tr td:nth-child(19) {
   text-align: center !important;
+}
+
+/* SUMMARY */
+
+#filtered_summary_container {
+  font-size: x-small;
+  padding-top: 1em;
+}
+
+#filtered_summary_container table thead tr th, 
+#filtered_summary_container table tbody tr td {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+#filtered_summary_container .dataTables_scrollBody table {
+  float: left;
+}
+
+#filtered_summary_container table thead tr th,
+#filtered_summary_container table tbody tr td {
+  min-width: 10px;
+  text-align: center;
+}
+
+#filtered_summary_container table thead tr th:nth-child(1),
+#filtered_summary_container table tbody tr td:nth-child(1) {
+  min-width: 100px;
+  text-align: left;
+}
+
+#filtered_summary_container table thead tr th:nth-child(2),
+#filtered_summary_container table tbody tr td:nth-child(2),
+#filtered_summary_container table thead tr th:nth-child(3),
+#filtered_summary_container table tbody tr td:nth-child(3),
+#filtered_summary_container table thead tr th:nth-child(4),
+#filtered_summary_container table tbody tr td:nth-child(4) {
+  min-width: 40px;
+}
+
+/* DETAILED SUMMARY */
+
+#filtered_detailed_summary_container {
+  font-size: x-small;
+  padding-top: 1em;
+}
+
+#filtered_detailed_summary_container table thead tr th, 
+#filtered_detailed_summary_container table tbody tr td {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+#filtered_detailed_summary_container .dataTables_scrollBody table {
+  float: left;
+}
+
+#filtered_detailed_summary_container table thead tr th,
+#filtered_detailed_summary_container table tbody tr td {
+  min-width: 10px;
+  text-align: center;
+}
+
+#filtered_detailed_summary_container table thead tr th:nth-child(1),
+#filtered_detailed_summary_container table tbody tr td:nth-child(1) {
+  min-width: 100px;
+  text-align: left;
+}
+
+#filtered_detailed_summary_container table thead tr th:nth-child(5),
+#filtered_detailed_summary_container table tbody tr td:nth-child(5),
+#filtered_detailed_summary_container table thead tr th:nth-child(6),
+#filtered_detailed_summary_container table tbody tr td:nth-child(6),
+#filtered_detailed_summary_container table thead tr th:nth-child(7),
+#filtered_detailed_summary_container table tbody tr td:nth-child(7) {
+  min-width: 40px;
+}
+
+#filtered_detailed_summary_container table thead tr th:nth-child(8),
+#filtered_detailed_summary_container table tbody tr td:nth-child(8) {
+  min-width: 20px;
 }
 
 .dataTables_paginate {

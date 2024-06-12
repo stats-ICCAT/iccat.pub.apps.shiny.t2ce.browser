@@ -9,7 +9,8 @@ library(shinyWidgets)
 library(shinycssloaders)
 library(DT)
 
-library(dplyr)
+library(flextable)
+library(officer)
 
 options(scipen = 9999)
 
@@ -17,6 +18,8 @@ options(scipen = 9999)
 Sys.setlocale(category = "LC_ALL", locale = "en_US.UTF-8")
 
 load("./REF_TIME_PERIODS.RData")
+load("./META.RData")
+load("./CE.RData")
 load("./CE_w.RData")
 
 ALL_FLAGS        = setNames(as.character(REF_FLAGS$CODE),        paste0(REF_FLAGS$CODE,        " - ", REF_FLAGS$NAME_EN))
@@ -26,6 +29,9 @@ ALL_TIME_PERIODS = setNames(REF_TIME_PERIODS$CODE,               paste0(REF_TIME
 
 ALL_DATASET_TYPES  = setNames(c("..", "n.", ".w", "nw"), 
                               c(".. (efforts only)", "n. (catches in numbers only)", ".w (catches in weights only)", "nw (catches in numbers and weights)"))
+
+ALL_CATCH_UNITS    = setNames(c("KG", "NO"), 
+                              c("KG - Weight", "NO - Number of fish"))
 
 ALL_FISHING_MODES  = setNames(c("FS", "LS", "UNK"), 
                               c("FS - Free-swimming schools", "LS - Log-associated schools", "UNK - Unknown / Unavailable"))

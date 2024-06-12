@@ -168,4 +168,22 @@ CE_w = CE_w[, .(DATASET_ID, STRATA_ID, DATASET_TYPE_CODE_DEFAULT, DATASET_TYPE_C
                 BSH, POR, SMA, 
                 oSks)]
 
+CE[, YEAR_SHORT := str_sub(as.character(YEAR), 3, 4)]
+YEAR_SHORT_FACTORS = unique(CE[order(YEAR)]$YEAR_SHORT)
+
+CE$YEAR_SHORT =
+  factor(
+    CE$YEAR_SHORT,
+    levels = YEAR_SHORT_FACTORS,
+    labels = YEAR_SHORT_FACTORS,
+    ordered = TRUE
+  )
+
+META = list(LAST_UPDATE = "2024-01-31", FILENAME = "ICCAT_T2CE_all_20240131.csv.gz")
+
+save("META", file = "./shiny/META.RData", compress = "gzip")
+save("CE",   file = "./shiny/CE.RData",   compress = "gzip")
 save("CE_w", file = "./shiny/CE_w.RData", compress = "gzip")
+
+write.table(CE_w, file = gzfile(paste0("./shiny/www/", META$FILENAME)), sep = ",", na = "")
+

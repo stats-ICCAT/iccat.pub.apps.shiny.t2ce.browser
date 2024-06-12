@@ -20,8 +20,7 @@ ui = function() {
               width = 8,
               h2(
                 img(src = "iccat-logo.jpg", height = "96px"),
-                span(TITLE),
-                downloadButton("downloadData", "Download")
+                span(TITLE)
               )
             )
           ),
@@ -42,11 +41,35 @@ ui = function() {
               fluidRow(
                 column(
                   width = 12,
+                  virtualSelectInput("timePeriods", "Time period(s)",
+                                     width = "100%",
+                                     multiple = TRUE,
+                                     autoSelectFirstOption = FALSE,
+                                     choices = ALL_TIME_PERIODS,
+                                     search = TRUE,
+                                     showValueAsTags = TRUE)
+                )
+              ),
+              fluidRow(
+                column(
+                  width = 12,
                   virtualSelectInput("datasetTypes", "Dataset type(s)",
                                      width = "100%",
                                      multiple = TRUE,
                                      autoSelectFirstOption = FALSE,
                                      choices = ALL_DATASET_TYPES,
+                                     search = TRUE,
+                                     showValueAsTags = TRUE)
+                )
+              ),
+              fluidRow(
+                column(
+                  width = 12,
+                  virtualSelectInput("catchUnits", "Catch unit(s)",
+                                     width = "100%",
+                                     multiple = TRUE,
+                                     autoSelectFirstOption = FALSE,
+                                     choices = ALL_CATCH_UNITS,
                                      search = TRUE,
                                      showValueAsTags = TRUE)
                 )
@@ -90,20 +113,37 @@ ui = function() {
               fluidRow(
                 column(
                   width = 12,
-                  virtualSelectInput("timePeriods", "Time period(s)",
-                                     width = "100%",
-                                     multiple = TRUE,
-                                     autoSelectFirstOption = FALSE,
-                                     choices = ALL_TIME_PERIODS,
-                                     search = TRUE,
-                                     showValueAsTags = TRUE)
+                  span("Data last updated on:"), 
+                  strong(META$LAST_UPDATE)
+                )
+              ),
+              fluidRow(
+                column(
+                  width = 12,
+                  hr(),
+                  strong("Download: "),
+                  downloadButton("downloadFiltered", "Filtered data"),
+                  downloadButton("downloadAll",      "All data")
                 )
               )
             ),
             column(
               width = 10,
-              tags$div(id = "filtered_data_container",
-                       dataTableOutput("filtered_data")
+              tabsetPanel(
+                tabPanel("Data",
+                         tags$div(id = "filtered_data_container",
+                                  dataTableOutput("filtered_data")
+                         )
+                ),
+                tabPanel("Summary",
+                         tags$div(id = "filtered_summary_container",
+                                  dataTableOutput("summary_data"))
+                ),
+                tabPanel("Detailed summary",
+                         tags$div(id = "filtered_detailed_summary_container",
+                                  dataTableOutput("detailed_summary_data")
+                         )
+                )
               )
             )
           )
