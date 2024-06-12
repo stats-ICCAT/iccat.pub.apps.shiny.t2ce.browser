@@ -135,6 +135,13 @@
   min-width: 20px;
 }
 
+/* LAYOUT ETC. */
+
+.nav-tabs li {
+    min-width: 128px;
+    text-align: center;
+}
+
 .dataTables_paginate {
   float: left !important;
   margin-left: calc(20vw - 2em);
