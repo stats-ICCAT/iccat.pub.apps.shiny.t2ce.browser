@@ -135,7 +135,7 @@ server = function(input, output, session) {
 
     validate(need(nrow(filtered)  > 0,    "Current filtering criteria do not identify any valid record!"))
     
-    FILTERED_YEAR_SHORTS = sort(unique(filtered_CE$YEAR_SHORT))
+    FILTERED_YEAR_SHORTS = lapply(first_year:last_year, function(y) { return (str_sub(as.character(y), 3, 4) ) })
     
     filtered$YEAR_SHORT =
       factor(
@@ -229,7 +229,7 @@ server = function(input, output, session) {
 
     validate(need(nrow(filtered)  > 0,    "Current filtering criteria do not identify any valid record!"))
 
-    FILTERED_YEAR_SHORTS = sort(unique(filtered_CE$YEAR_SHORT))
+    FILTERED_YEAR_SHORTS = lapply(first_year:last_year, function(y) { return (str_sub(as.character(y), 3, 4) ) })
     
     filtered$YEAR_SHORT =
       factor(
