@@ -88,7 +88,8 @@ server = function(input, output, session) {
                       oTun,
                       BSH, POR, SMA, 
                       oSks, 
-                      oFis)]
+                      oFis,
+                      rest)]
     
     validate(need(nrow(filtered) > 0, "Current filtering criteria do not identify any valid record!"))
     
@@ -325,8 +326,9 @@ server = function(input, output, session) {
                      "oTun",
                      "BSH", "POR", "SMA",
                      "oSks",
-                     "oFis")
-      ) %>% DT::formatCurrency(columns = c(15, 17, 20:55), currency = "")
+                     "oFis",
+                     "rest")
+      ) %>% DT::formatCurrency(columns = c(15, 17, 20:56), currency = "") 
     )
   
   output$summary_data =
