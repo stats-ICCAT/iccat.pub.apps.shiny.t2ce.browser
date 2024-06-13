@@ -108,7 +108,7 @@ server = function(input, output, session) {
     }
     
     if(!is.null(input$timePeriods)) {
-      filtered = filtered[TIME_PERIOD_TYPE_CODE %in% input$timePeriods]
+      filtered = filtered[TIME_PERIOD_CODE %in% input$timePeriods]
     }
     
     end = Sys.time()
