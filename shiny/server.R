@@ -111,6 +111,10 @@ server = function(input, output, session) {
       filtered = filtered[TIME_PERIOD_CODE %in% input$timePeriods]
     }
     
+    if(!is.null(input$squareTypes)) {
+      filtered = filtered[SQUARE_TYPE_CODE %in% input$squareTypes]
+    }
+    
     end = Sys.time()
     
     INFO(paste0("Filtering data: ", end - start))
