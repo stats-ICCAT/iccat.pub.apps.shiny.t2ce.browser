@@ -302,8 +302,10 @@ server = function(input, output, session) {
         options = list(
           pageLength = INITIAL_NUM_ENTRIES, 
           autoWidth = TRUE,
-          scrollX = TRUE
+          scrollX = TRUE,
+          dom = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
         ),
+        filter    = "none",
         selection = "none",
         rownames = FALSE,
         colnames = c("Dataset ID", "Strata ID",
@@ -328,7 +330,9 @@ server = function(input, output, session) {
                      "oSks",
                      "oFis",
                      "rest")
-      ) %>% DT::formatCurrency(columns = c(15, 17, 20:56), currency = "") 
+      ) 
+      %>% DT::formatCurrency(columns = c(15, 17, 20:56), currency = "") 
+      %>% DT::formatRound(columns = c(12, 13), digits = 6)
     )
   
   output$summary_data =
@@ -340,8 +344,10 @@ server = function(input, output, session) {
         options = list(
           pageLength = INITIAL_NUM_ENTRIES, 
           autoWidth = TRUE,
-          scrollX = TRUE
+          scrollX = TRUE,
+          dom = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
         ),
+        filter    = "none",
         selection = "none",
         rownames = FALSE,
         colnames = c("Flag", 
@@ -361,8 +367,10 @@ server = function(input, output, session) {
         options = list(
           pageLength = INITIAL_NUM_ENTRIES, 
           autoWidth = TRUE,
-          scrollX = TRUE
+          scrollX = TRUE,
+          dom = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
         ),
+        filter    = "none",
         selection = "none",
         rownames = FALSE,
         colnames = c("Fleet code", 
@@ -396,7 +404,7 @@ server = function(input, output, session) {
         
         paste0("T2CE_", paste0(components, collapse = "_"), ".csv.gz")
       },
-      content = function(file) {
+    content = function(file) {
         to_download = filter_ce_data()
         
         write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
