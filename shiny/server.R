@@ -127,10 +127,6 @@ server = function(input, output, session) {
   filter_ce_data_ = function(input = EMPTY_FILTER) {
     filtered = default_filter_data(CE_w, input)
 
-    filtered$DATASET_ID     = NULL
-    filtered$STRATA_ID      = NULL
-    filtered$FLAG_CODE      = NULL
-
     validate(need(nrow(filtered) > 0, "Current filtering criteria do not identify any valid record!"))
 
     return(filtered)
@@ -145,7 +141,8 @@ server = function(input, output, session) {
   filter_summary_data_ = function(input = EMPTY_FILTER, use_symbols = FALSE) {
     filtered = default_filter_data(CE, input)
     filtered = 
-      filtered[, .(CATCH = sum(CATCH, na.rm = TRUE)), keyby = .(FLAG_NAME_EN, 
+      filtered[, .(CATCH = sum(CATCH, na.rm = TRUE)), keyby = .(FLAG_CODE,
+                                                                FLAG_NAME_EN, 
                                                                 GEAR_GROUP_CODE, 
                                                                 CATCH_UNIT_CODE, 
                                                                 DATASET_TYPE_CODE, 
@@ -177,12 +174,12 @@ server = function(input, output, session) {
         ordered = TRUE
       )
     
-    filtered = filtered[, .(FLAG_NAME_EN, GEAR_GROUP_CODE, CATCH_UNIT_CODE, DATASET_TYPE_CODE, YEAR_SHORT, CATCH)]
+    filtered = filtered[, .(FLAG_CODE, FLAG_NAME_EN, GEAR_GROUP_CODE, CATCH_UNIT_CODE, DATASET_TYPE_CODE, YEAR_SHORT, CATCH)]
     
     filtered_w =
       dcast.data.table(
         filtered,
-        FLAG_NAME_EN + GEAR_GROUP_CODE + CATCH_UNIT_CODE + DATASET_TYPE_CODE ~ YEAR_SHORT,
+        FLAG_CODE + FLAG_NAME_EN + GEAR_GROUP_CODE + CATCH_UNIT_CODE + DATASET_TYPE_CODE ~ YEAR_SHORT,
         fun.aggregate = function(v) { return (ifelse(use_symbols, "✅", "1")) },
         drop = c(TRUE, FALSE),
         value.var = "CATCH",
@@ -202,7 +199,7 @@ server = function(input, output, session) {
     filtered = default_filter_data(CE, input)
     
     filtered = 
-      filtered[, .(CATCH = sum(CATCH, na.rm = TRUE)), keyby = .(FLAG_NAME_EN,
+      filtered[, .(CATCH = sum(CATCH, na.rm = TRUE)), keyby = .(FLAG_CODE, FLAG_NAME_EN,
                                                                 FLEET_CODE, 
                                                                 GEAR_GROUP_CODE,
                                                                 GEAR_CODE, 
@@ -243,7 +240,7 @@ server = function(input, output, session) {
     filtered_w =
       dcast.data.table(
         filtered,
-        FLAG_NAME_EN + FLEET_CODE + GEAR_GROUP_CODE + GEAR_CODE + TIME_PERIOD_TYPE_CODE + SQUARE_TYPE_CODE + PRIMARY_EFFORT_UNIT_CODE + SECONDARY_EFFORT_UNIT_CODE + CATCH_UNIT_CODE + DATASET_TYPE_CODE ~ YEAR_SHORT,
+        FLAG_CODE + FLAG_NAME_EN + FLEET_CODE + GEAR_GROUP_CODE + GEAR_CODE + TIME_PERIOD_TYPE_CODE + SQUARE_TYPE_CODE + PRIMARY_EFFORT_UNIT_CODE + SECONDARY_EFFORT_UNIT_CODE + CATCH_UNIT_CODE + DATASET_TYPE_CODE ~ YEAR_SHORT,
         fun.aggregate = function(v) { return (ifelse(use_symbols, "✅", "1")) },
         drop = c(TRUE, FALSE),
         value.var = "CATCH",
@@ -254,53 +251,65 @@ server = function(input, output, session) {
   }
 
   output$filtered_data =
-    renderDataTable(
-      DT::datatable(
-        filter_ce_data(),
-        options = list(
-          pageLength = INITIAL_NUM_ENTRIES, 
-          autoWidth = TRUE,
-          scrollX = TRUE,
-          dom = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
-        ),
-        filter    = "none",
-        selection = "none",
-        rownames = FALSE,
-        colnames = c("Flag", "Fleet code", 
-                     "Gear group", "Gear",
-                     "Year", "Time period", "Time",
-                     "Square", "Quad", "Lat", "Lon", "CWP grid",
-                     "Fishing mode",
-                     "Effort #1", "Effort unit #1",
-                     "Effort #2", "Effort unit #2",
-                     "Catch unit",
-                     "Dataset type", 
-                     SPECIES_ORDERED)
-      ) 
-      %>% DT::formatCurrency(columns = c("PRIMARY_EFFORT", "SECONDARY_EFFORT", SPECIES_ORDERED), currency = "")
-      %>% DT::formatRound(columns = c("LAT", "LON"), digits = 6)
-    )
+    renderDataTable({
+      filtered_data = filter_ce_data()
+      
+      filtered_data$DATASET_ID = NULL
+      filtered_data$STRATA_ID = NULL
+      filtered_data$FLAG_CODE = NULL
+      
+      return(
+        DT::datatable(
+          filtered_data,
+          options = list(
+            pageLength = INITIAL_NUM_ENTRIES, 
+            autoWidth = TRUE,
+            scrollX = TRUE,
+            dom = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
+          ),
+          filter    = "none",
+          selection = "none",
+          rownames = FALSE,
+          colnames = c("Flag", "Fleet code", 
+                       "Gear group", "Gear",
+                       "Year", "Time period", "Time",
+                       "Square", "Quad", "Lat", "Lon", "CWP grid",
+                       "Fishing mode",
+                       "Effort #1", "Effort unit #1",
+                       "Effort #2", "Effort unit #2",
+                       "Catch unit",
+                       "Dataset type", 
+                       SPECIES_ORDERED)
+        ) 
+        %>% DT::formatCurrency(columns = c("PRIMARY_EFFORT", "SECONDARY_EFFORT", SPECIES_ORDERED), currency = "")
+        %>% DT::formatRound(columns = c("LAT", "LON"), digits = 6)
+      )
+    })
   
   output$summary_data =
     renderDataTable({
       filtered_data = filter_summary_data()
       
-      DT::datatable(
-        filtered_data,
-        options = list(
-          pageLength = INITIAL_NUM_ENTRIES, 
-          autoWidth = TRUE,
-          scrollX = TRUE,
-          dom = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
-        ),
-        filter    = "none",
-        selection = "none",
-        rownames = FALSE,
-        colnames = c("Flag", 
-                     "Gear group",
-                     "Catch unit",
-                     "Dataset type",
-                     colnames(filtered_data[, 5:ncol(filtered_data)]))
+      filtered_data$FLAG_CODE = NULL
+      
+      return(
+        DT::datatable(
+          filtered_data,
+          options = list(
+            pageLength = INITIAL_NUM_ENTRIES, 
+            autoWidth = TRUE,
+            scrollX = TRUE,
+            dom = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
+          ),
+          filter    = "none",
+          selection = "none",
+          rownames = FALSE,
+          colnames = c("Flag", 
+                       "Gear group",
+                       "Catch unit",
+                       "Dataset type",
+                       colnames(filtered_data[, 5:ncol(filtered_data)]))
+        )
       )
     })
   
@@ -308,24 +317,28 @@ server = function(input, output, session) {
     renderDataTable({
       filtered_data = filter_detailed_summary_data()
     
-      DT::datatable(
-        filtered_data,
-        options = list(
-          pageLength = INITIAL_NUM_ENTRIES, 
-          autoWidth = TRUE,
-          scrollX = TRUE,
-          dom = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
-        ),
-        filter    = "none",
-        selection = "none",
-        rownames = FALSE,
-        colnames = c("Flag", "Fleet code", 
-                     "Gear group", "Gear",
-                     "Time period", "Square",
-                     "Effort unit #1", "Effort unit #2",
-                     "Catch unit",
-                     "Dataset type",
-                     colnames(filtered_data[, 11:ncol(filtered_data)]))
+      filtered_data$FLAG_CODE = NULL
+      
+      return(
+        DT::datatable(
+          filtered_data,
+          options = list(
+            pageLength = INITIAL_NUM_ENTRIES, 
+            autoWidth = TRUE,
+            scrollX = TRUE,
+            dom = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
+          ),
+          filter    = "none",
+          selection = "none",
+          rownames = FALSE,
+          colnames = c("Flag", "Fleet code", 
+                       "Gear group", "Gear",
+                       "Time period", "Square",
+                       "Effort unit #1", "Effort unit #2",
+                       "Catch unit",
+                       "Dataset type",
+                       colnames(filtered_data[, 11:ncol(filtered_data)]))
+        )
       )
     })
   
