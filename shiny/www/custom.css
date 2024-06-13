@@ -12,56 +12,38 @@
   line-height: 1em;
 }
 
-#filtered_data_container table thead tr th:nth-child(1),
-#filtered_data_container table thead tr th:nth-child(2) {
-  min-width: 50px;
+/* Default cell width + alignment */
+#filtered_data_container table thead tr th,
+#filtered_data_container table tbody tr td {
+  min-width: 10px;
 }
 
-#filtered_data_container table thead tr th:nth-child(7),
-#filtered_data_container table tbody tr td:nth-child(7) {
-  min-width: 40px;
+#filtered_data_container table thead tr th:nth-child(n + 3), 
+#filtered_data_container table tbody tr td:nth-child(n + 3):nth-child(-n + 9),
+#filtered_data_container table tbody tr td:nth-child(n + 12):nth-child(-n + 13),
+#filtered_data_container table tbody tr td:nth-child(15), 
+#filtered_data_container table tbody tr td:nth-child(n + 17):nth-child(-n + 19) {
+  text-align: center;
 }
 
-/* #filtered_data_container table thead tr th:nth-child(3), */
-/* #filtered_data_container table thead tr th:nth-child(6), */
-/* #filtered_data_container table thead tr th:nth-child(7), */
-#filtered_data_container table thead tr th:nth-child(14) {
-  min-width: 70px;
-}
-
-#filtered_data_container table thead tr th:nth-child(4) {
+/* Flag name & fleet code */
+#filtered_data_container table thead tr th:nth-child(-n + 2) {
   min-width: 150px;
 }
 
-#filtered_data_container table thead tr th:nth-child(5) {
-  min-width: 100px;
+#filtered_data_container table thead tr th:nth-child(n + 3):nth-child(-n + 19) {
+  min-width: 35px;
 }
 
-#filtered_data_container table thead tr th:nth-child(15),
-#filtered_data_container table thead tr th:nth-child(17),
-#filtered_data_container table thead tr th:nth-child(19) {
-  min-width: 50px;
-}
-
-#filtered_data_container table thead tr th:nth-child(16),
-#filtered_data_container table thead tr th:nth-child(18) {
-  min-width: 60px;
-}
-
-#filtered_data_container table tbody tr td:nth-child(3),
-#filtered_data_container table tbody tr td:nth-child(6),
-#filtered_data_container table tbody tr td:nth-child(7),
-#filtered_data_container table tbody tr td:nth-child(8),
-#filtered_data_container table tbody tr td:nth-child(9),
-#filtered_data_container table tbody tr td:nth-child(10),
-#filtered_data_container table tbody tr td:nth-child(14),
-#filtered_data_container table tbody tr td:nth-child(16),
-#filtered_data_container table tbody tr td:nth-child(18),
-#filtered_data_container table tbody tr td:nth-child(19) {
-  text-align: center !important;
+#filtered_data_container table thead tr th:nth-child(n + 20) {
+  min-width: 40px;
 }
 
 /* SUMMARY */
+
+#filtered_summary_container .dataTables_scrollBody table {
+  float: left;
+}
 
 #filtered_summary_container {
   font-size: x-small;
@@ -75,38 +57,39 @@
   line-height: 1em;
 }
 
-#filtered_summary_container .dataTables_scrollBody table {
-  float: left;
-}
-
+/* Default cell width + alignment */
 #filtered_summary_container table thead tr th,
 #filtered_summary_container table tbody tr td {
   min-width: 10px;
+}
+
+#filtered_summary_container table thead tr th:nth-child(n + 2),
+#filtered_summary_container table tbody tr td:nth-child(n + 2) {
   text-align: center;
 }
-
-#filtered_summary_container table thead tr th:nth-child(1),
-#filtered_summary_container table tbody tr td:nth-child(1) {
-  min-width: 100px;
-  text-align: left;
+ 
+/* Flag name */
+#filtered_summary_container table thead tr th:nth-child(1) {
+  min-width: 150px;
 }
 
-#filtered_summary_container table thead tr th:nth-child(2),
-#filtered_summary_container table tbody tr td:nth-child(2),
-#filtered_summary_container table thead tr th:nth-child(3),
-#filtered_summary_container table tbody tr td:nth-child(3),
-#filtered_summary_container table thead tr th:nth-child(4),
-#filtered_summary_container table tbody tr td:nth-child(4) {
+/* Gear group & catch unit & dataset type */
+#filtered_summary_container table thead tr th:nth-child(n + 2):nth-child(-n + 4) {
   min-width: 40px;
 }
 
 /* DETAILED SUMMARY */
+
+#filtered_detailed_summary_container .dataTables_scrollBody table {
+  float: left;
+}
 
 #filtered_detailed_summary_container {
   font-size: x-small;
   padding-top: 1em;
 }
 
+/* Default cell width + alignment */
 #filtered_detailed_summary_container table thead tr th, 
 #filtered_detailed_summary_container table tbody tr td {
   padding-top: 2px !important;
@@ -114,34 +97,25 @@
   line-height: 1em;
 }
 
-#filtered_detailed_summary_container .dataTables_scrollBody table {
-  float: left;
-}
-
 #filtered_detailed_summary_container table thead tr th,
 #filtered_detailed_summary_container table tbody tr td {
   min-width: 10px;
+}
+
+#filtered_detailed_summary_container table thead tr th:nth-child(n + 3),
+#filtered_detailed_summary_container table tbody tr td:nth-child(n + 3) {
   text-align: center;
 }
 
-#filtered_detailed_summary_container table thead tr th:nth-child(1),
-#filtered_detailed_summary_container table tbody tr td:nth-child(1) {
-  min-width: 100px;
-  text-align: left;
+/* Flag name & fleet code */
+#filtered_detailed_summary_container table thead tr th:nth-child(-n + 2) {
+  min-width: 150px;
 }
 
-#filtered_detailed_summary_container table thead tr th:nth-child(5),
-#filtered_detailed_summary_container table tbody tr td:nth-child(5),
-#filtered_detailed_summary_container table thead tr th:nth-child(6),
-#filtered_detailed_summary_container table tbody tr td:nth-child(6),
-#filtered_detailed_summary_container table thead tr th:nth-child(7),
-#filtered_detailed_summary_container table tbody tr td:nth-child(7) {
+/* Gear group & Gear & Time period & Square & Effort unit I & Effort unit II & Catch unit & Dataset type */
+#filtered_detailed_summary_container table thead tr th:nth-child(n + 3):nth-child(-n + 10),
+#filtered_detailed_summary_container table tbody tr td:nth-child(n + 3):nth-child(-n + 10) {
   min-width: 40px;
-}
-
-#filtered_detailed_summary_container table thead tr th:nth-child(8),
-#filtered_detailed_summary_container table tbody tr td:nth-child(8) {
-  min-width: 20px;
 }
 
 /* LAYOUT ETC. */

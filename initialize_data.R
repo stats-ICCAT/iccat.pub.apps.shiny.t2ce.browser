@@ -1,19 +1,5 @@
 library(iccat.dev.data)
 
-REF_TIME_PERIODS = 
-  tabular_query(
-    connection = DB_STAT(server = "ATENEA\\SQL22"),
-    statement = "
-    SELECT
-      TimePeriodID AS CODE,
-      TimePeriod AS NAME_EN,
-      TimePeriodGroup AS TYPE_CODE
-    FROM
-      dbSTAT.dbo.TimePeriods
-    ORDER BY
-      1 ASC"
-  )
-
 SPECIES_MAPPINGS =
   tabular_query(
     connection = DB_GIS(server = "ATENEA\\SQL22"),
@@ -22,8 +8,6 @@ SPECIES_MAPPINGS =
     FROM
       NewGIS.dbo.SPECIES_MAPPING_T2CE"
   )
-
-save("REF_TIME_PERIODS", file = "./shiny/REF_TIME_PERIODS.RData", compress = "gzip")
 
 SPECIES_ORDERED = c("BFT", "ALB", # Temperate tunas
                     "YFT", "BET", "SKJ", # Tropical tunas
@@ -92,12 +76,38 @@ CE = merge(CE, CE_units[, .(DATASET_ID, STRATA_ID, DATASET_TYPE_CODE_CALC)],
            by = c("DATASET_ID", "STRATA_ID"),
            all.x = TRUE)
 
-# Extracts effort strata columns
-CE_EF = unique(CE[, c(1:26, 32)])
-CE_EF[is.na(PRIMARY_EFFORT), PRIMARY_EFFORT := 0]
+CE[, DATASET_TYPE_CODE := DATASET_TYPE_CODE_CALC]
+CE$DATASET_TYPE_CODE_DEFAULT = NULL
+CE$DATASET_TYPE_CODE_CALC    = NULL
+
+# Attaches flag metadata to the wide catch records
+CE = 
+  merge(
+    CE, REF_FLAGS[, .(CODE, FLAG_NAME_EN = NAME_EN)],
+    by.x = "FLAG_CODE", by.y = "CODE",
+    all.x = TRUE
+  )
+
+CE_EF = 
+  CE[, .(DATASET_ID, STRATA_ID, 
+         FLAG_CODE, FLAG_NAME_EN, 
+         FLEET_CODE,
+         GEAR_GROUP_CODE, GEAR_CODE, 
+         YEAR, TIME_PERIOD_TYPE_CODE, TIME_PERIOD_CODE,
+         SQUARE_TYPE_CODE, QUADRANT_CODE, LAT, LON, CWP_GRID_CODE,
+         FISHING_MODE_CODE,
+         PRIMARY_EFFORT, PRIMARY_EFFORT_UNIT_CODE,
+         SECONDARY_EFFORT, SECONDARY_EFFORT_UNIT_CODE,
+         DATASET_TYPE_CODE)]
+
+# Extracts unique effort strata
+CE_EF = unique(CE_EF)
+
+# Commented out to identify strata with primary effort not set (should have been fixed by now...)
+#CE_EF[is.na(PRIMARY_EFFORT), PRIMARY_EFFORT := 0]
 
 # Extracts catch strata columns
-CE_CA = CE[!is.na(SPECIES_CODE), c(1, 2, 27:31)]
+CE_CA = CE[!is.na(SPECIES_CODE), .(DATASET_ID, STRATA_ID, CATCH_TYPE_CODE, CATCH, CATCH_UNIT_CODE, SPECIES_CODE)]
 
 # Removes all species metadata columns and attempts to convert all catches into 'float' numbers...
 CE_CA = CE_CA[, .(CATCH = sum(CATCH * 1.0, na.rm = TRUE)), keyby = .(SPECIES_CODE, DATASET_ID, STRATA_ID, CATCH_UNIT_CODE)]
@@ -128,25 +138,17 @@ CE_w =
         by = c("DATASET_ID", "STRATA_ID"),
         all.x = TRUE)
 
-# Attaches flag metadata to the wide catch records
-CE_w = 
-  merge(
-    CE_w, REF_FLAGS,
-    by.x = "FLAG_CODE", by.y = "CODE",
-    all.x = TRUE
-  )
-
-# Returns the final dataset 
-CE_w = CE_w[, .(DATASET_ID, STRATA_ID, DATASET_TYPE_CODE_DEFAULT, DATASET_TYPE_CODE_CALC, 
-                FLAG_CODE, FLAG_NAME_EN = NAME_EN, 
+CE_w = CE_w[, .(DATASET_ID, STRATA_ID, 
+                FLAG_CODE, FLAG_NAME_EN, 
                 FLEET_CODE,
                 GEAR_GROUP_CODE, GEAR_CODE, 
-                TIME_PERIOD_CODE, TIME_PERIOD_TYPE_CODE, YEAR, MONTH_START, MONTH_END,
+                YEAR, TIME_PERIOD_TYPE_CODE, TIME_PERIOD_CODE,
                 SQUARE_TYPE_CODE, QUADRANT_CODE, LAT, LON, CWP_GRID_CODE,
                 FISHING_MODE_CODE,
                 PRIMARY_EFFORT, PRIMARY_EFFORT_UNIT_CODE,
                 SECONDARY_EFFORT, SECONDARY_EFFORT_UNIT_CODE,
                 CATCH_UNIT_CODE,
+                DATASET_TYPE_CODE, 
                 BFT, ALB,
                 YFT, BET, SKJ,
                 SWO, BUM, SAI, SPF, WHM,
@@ -158,7 +160,14 @@ CE_w = CE_w[, .(DATASET_ID, STRATA_ID, DATASET_TYPE_CODE_DEFAULT, DATASET_TYPE_C
                 BSH, POR, SMA, 
                 oSks,
                 oFis,
-                rest)]
+                rest)][order(FLAG_NAME_EN, FLEET_CODE, 
+                             GEAR_GROUP_CODE, GEAR_CODE, 
+                             YEAR, TIME_PERIOD_TYPE_CODE, TIME_PERIOD_CODE,
+                             SQUARE_TYPE_CODE, QUADRANT_CODE, LAT, LON,
+                             FISHING_MODE_CODE,
+                             PRIMARY_EFFORT_UNIT_CODE, SECONDARY_EFFORT_UNIT_CODE,
+                             CATCH_UNIT_CODE,
+                             DATASET_TYPE_CODE)]
 
 CE[, YEAR_SHORT := str_sub(as.character(YEAR), 3, 4)]
 YEAR_SHORT_FACTORS = unique(CE[order(YEAR)]$YEAR_SHORT)
@@ -171,10 +180,10 @@ CE$YEAR_SHORT =
     ordered = TRUE
   )
 
-META = list(LAST_UPDATE = "2024-01-31", FILENAME = "ICCAT_T2CE_all_20240131.csv.gz")
+META = list(LAST_UPDATE = "2024-01-31", FILENAME = "ICCAT_T2CE_20240131_all.csv.gz")
 
 save("META", file = "./shiny/META.RData", compress = "gzip")
 save("CE",   file = "./shiny/CE.RData",   compress = "gzip")
 save("CE_w", file = "./shiny/CE_w.RData", compress = "gzip")
 
-write.table(CE_w, file = gzfile(paste0("./shiny/www/", META$FILENAME)), sep = ",", na = "")
+write.table(CE_w, file = gzfile(paste0("./shiny/www/", META$FILENAME)), sep = ",", na = "", row.names = FALSE)
