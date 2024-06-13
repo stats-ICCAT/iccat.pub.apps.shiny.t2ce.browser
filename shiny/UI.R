@@ -222,7 +222,7 @@ ui = function() {
                   ), 
                   column(
                     width = 4, 
-                    strong("Det. summary")
+                    strong("Det. summary", style = "vertical-align: -8px")
                   )
                 )
               ),
