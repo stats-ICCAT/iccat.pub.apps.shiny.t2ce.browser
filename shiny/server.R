@@ -279,9 +279,10 @@ server = function(input, output, session) {
                        "Effort #2", "Effort unit #2",
                        "Catch unit",
                        "Dataset type", 
+                       "Total",
                        SPECIES_ORDERED)
         ) 
-        %>% DT::formatCurrency(columns = c("PRIMARY_EFFORT", "SECONDARY_EFFORT", SPECIES_ORDERED), currency = "")
+        %>% DT::formatCurrency(columns = c("PRIMARY_EFFORT", "SECONDARY_EFFORT", "TOTAL", SPECIES_ORDERED), currency = "")
         %>% DT::formatRound(columns = c("LAT", "LON"), digits = 6)
       )
     })

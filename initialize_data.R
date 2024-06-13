@@ -29,9 +29,6 @@ CE =
     statement = "SELECT * FROM V_T2CE_WEB"
   )
 
-CE_ = copy(CE)
-CE = copy(CE_)
-
 # Converts weights from tons to kilograms
 CE[CATCH_UNIT_CODE == "T", `:=`(CATCH_UNIT_CODE = "KG", CATCH = CATCH * 1000.0)]
 
@@ -121,6 +118,8 @@ CE_CA$SPECIES_CODE =
     ordered = TRUE
   )
 
+CE_CA_TOTALS = CE_CA[, .(TOTAL = sum(CATCH, na.rm = TRUE)), keyby = .(DATASET_ID, STRATA_ID, CATCH_UNIT_CODE)]
+
 # Long-to-wide conversion of catch records
 CE_CA_w = 
   dcast.data.table(
@@ -130,6 +129,14 @@ CE_CA_w =
     drop = c(TRUE, FALSE),
     value.var = "CATCH",
     fill = NA
+  )
+
+# Attaches total catches to the wide catch records
+CE_CA_w =
+  merge(
+    CE_CA_w, CE_CA_TOTALS,
+    by = c("DATASET_ID", "STRATA_ID", "CATCH_UNIT_CODE"),
+    all.x = TRUE
   )
 
 # Attaches effort and strata columns to the wide catch records
@@ -149,6 +156,7 @@ CE_w = CE_w[, .(DATASET_ID, STRATA_ID,
                 SECONDARY_EFFORT, SECONDARY_EFFORT_UNIT_CODE,
                 CATCH_UNIT_CODE,
                 DATASET_TYPE_CODE, 
+                TOTAL,
                 BFT, ALB,
                 YFT, BET, SKJ,
                 SWO, BUM, SAI, SPF, WHM,
