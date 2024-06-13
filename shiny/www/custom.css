@@ -18,24 +18,34 @@
   min-width: 10px;
 }
 
-#filtered_data_container table thead tr th:nth-child(n + 3), 
-#filtered_data_container table tbody tr td:nth-child(n + 3):nth-child(-n + 9),
-#filtered_data_container table tbody tr td:nth-child(n + 12):nth-child(-n + 13),
-#filtered_data_container table tbody tr td:nth-child(15), 
-#filtered_data_container table tbody tr td:nth-child(n + 17):nth-child(-n + 19) {
+#filtered_data_container table thead tr th:nth-child(n + 3),                      /* Header, from the  3rd column ("Gear group") onwards */
+#filtered_data_container table tbody tr td:nth-child(n + 3):nth-child(-n + 9),    /* Body,   from the  3rd column ("Gear group") to the 9th column ("Quad") */
+#filtered_data_container table tbody tr td:nth-child(n + 12):nth-child(-n + 13),  /* Body,   from the 12th column ("CWP grid") to the 13th column ("Fishing mode") */
+#filtered_data_container table tbody tr td:nth-child(15),                         /* Body,        the 15th column ("Effort unit #1") */
+#filtered_data_container table tbody tr td:nth-child(n + 17):nth-child(-n + 19) { /* Body,   from the 17th column ("Effort unit #2") to the 19th column ("Dataset type") */
   text-align: center;
 }
 
 /* Flag name & fleet code */
-#filtered_data_container table thead tr th:nth-child(-n + 2) {
+#filtered_data_container table thead tr th:nth-child(-n + 2) {                    /* Header, from the  1st column ("Flag") to the 2nd column ("Fleet code") */
   min-width: 150px;
 }
 
-#filtered_data_container table thead tr th:nth-child(n + 3):nth-child(-n + 19) {
+#filtered_data_container table thead tr th:nth-child(n + 3):nth-child(-n + 19) {  /* Header, from the  3rd column ("Gear group") to the 19th column ("Dataset type") */
   min-width: 35px;
 }
 
-#filtered_data_container table thead tr th:nth-child(n + 20) {
+#filtered_data_container table thead tr th:nth-child(14),                         /* Header, for the   14th column ("Effort #1") only */
+#filtered_data_container table thead tr th:nth-child(16) {                        /* Header, for the   16th column ("Effort #2") only */
+  min-width: 55px !important; 
+}
+
+#filtered_data_container table thead tr th:nth-child(15),                         /* Header, for the   15th column ("Effort unit #1") only */
+#filtered_data_container table thead tr th:nth-child(17) {                        /* Header, for the   17th column ("Effort unit #2") only */
+  min-width: 45px !important; 
+}
+
+#filtered_data_container table thead tr th:nth-child(n + 20) {                    /* Header, from the 20th column ("Total") onwards */
   min-width: 40px;
 }
 
@@ -63,18 +73,18 @@
   min-width: 10px;
 }
 
-#filtered_summary_container table thead tr th:nth-child(n + 2),
-#filtered_summary_container table tbody tr td:nth-child(n + 2) {
+#filtered_summary_container table thead tr th:nth-child(n + 2),                   /* Header, from the  2nd column ("Gear group") onwards */
+#filtered_summary_container table tbody tr td:nth-child(n + 2) {                  /* Body,   from the  2nd column ("Gear group") onwards */
   text-align: center;
 }
  
 /* Flag name */
-#filtered_summary_container table thead tr th:nth-child(1) {
+#filtered_summary_container table thead tr th:nth-child(1) {                      /* Header, for the   1st column ("Flag") only */
   min-width: 150px;
 }
 
 /* Gear group & catch unit & dataset type */
-#filtered_summary_container table thead tr th:nth-child(n + 2):nth-child(-n + 4) {
+#filtered_summary_container table thead tr th:nth-child(n + 2):nth-child(-n + 4) {/* Header, from the  2nd column ("Gear group") to the 4th column ("Dataset type") */
   min-width: 40px;
 }
 
@@ -102,20 +112,26 @@
   min-width: 10px;
 }
 
-#filtered_detailed_summary_container table thead tr th:nth-child(n + 3),
-#filtered_detailed_summary_container table tbody tr td:nth-child(n + 3) {
+#filtered_detailed_summary_container table thead tr th:nth-child(n + 3),          /* Header, from the  3rd column ("Gear group") onwards */
+#filtered_detailed_summary_container table tbody tr td:nth-child(n + 3) {         /* Body,   from the  3rd column ("Gear group") onwards */
   text-align: center;
 }
 
 /* Flag name & fleet code */
-#filtered_detailed_summary_container table thead tr th:nth-child(-n + 2) {
+#filtered_detailed_summary_container table thead tr th:nth-child(-n + 2) {        /* Header, from the  1st column ("Flag") to the  2nd column ("Fleet code") */
   min-width: 150px;
 }
 
 /* Gear group & Gear & Time period & Square & Effort unit I & Effort unit II & Catch unit & Dataset type */
-#filtered_detailed_summary_container table thead tr th:nth-child(n + 3):nth-child(-n + 10),
-#filtered_detailed_summary_container table tbody tr td:nth-child(n + 3):nth-child(-n + 10) {
+#filtered_detailed_summary_container table thead tr th:nth-child(n + 3):nth-child(-n + 10),   /* Header, from the  3rd column ("Gear group") to the 10th column ("Dataset type") */
+#filtered_detailed_summary_container table tbody tr td:nth-child(n + 3):nth-child(-n + 10) {  /* Body,   from the  3rd column ("Gear group") to the 10th column ("Dataset type") */
   min-width: 40px;
+}
+
+/* Gear group & catch unit & dataset type */
+#filtered_detailed_summary_container table thead tr th:nth-child(n + 7):nth-child(-n + 8), /* Header, from the  7th column ("Effort unit #2") to the 8th column ("Effort unit #2") */
+#filtered_detailed_summary_container table thead tr th:nth-child(n + 7):nth-child(-n + 8) {/* Header, from the  7th column ("Effort unit #1") to the 8th column ("Effort unit #2") */
+  min-width: 45px !important; 
 }
 
 /* LAYOUT ETC. */
