@@ -1,5 +1,9 @@
 /* DATA */
 
+#filtered_data_container .dataTables_scrollBody table {
+  float: left;
+}
+
 #filtered_data_container {
   font-size: x-small;
   padding-top: 1em;

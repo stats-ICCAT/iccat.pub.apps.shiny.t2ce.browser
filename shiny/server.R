@@ -423,7 +423,7 @@ server = function(input, output, session) {
     content = function(file) {
       dataset = input$dataset
       
-      if(dataset == "Data")
+      if(dataset == TAB_DATA)
         file.copy(paste0("www/", META$FILENAME), file)
       else {
         if(dataset == "Summary") 
