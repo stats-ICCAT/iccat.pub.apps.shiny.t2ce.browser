@@ -14,6 +14,10 @@ options(scipen = 9999)
 # THIS IS ***FUNDAMENTAL*** TO HAVE THE DOCKER CONTAINER CORRECTLY LOAD THE .RData FILE WITH THE ORIGINAL UTF-8 ENCODING
 Sys.setlocale(category = "LC_ALL", locale = "en_US.UTF-8")
 
+TAB_DATA             = "Data"
+TAB_SUMMARY          = "Summary"
+TAB_DETAILED_SUMMARY = "Detailed summary"
+
 load("./META.RData")
 load("./CE.RData")
 load("./CE_w.RData")
@@ -36,6 +40,23 @@ ALL_CATCH_UNITS    = setNames(c("KG", "NO"),
 ALL_FISHING_MODES  = setNames(c("FS", "LS", "UNK"), 
                               c("FS - Free-swimming schools", "LS - Log-associated schools", "UNK - Unknown / Unavailable"))
 
+
+UI_select_input = function(id, label, choices) {
+  return(
+    virtualSelectInput(
+      inputId = id, 
+      label = label,
+      selected = NA,
+      width = "100%",
+      multiple = TRUE,
+      autoSelectFirstOption = FALSE,
+      choices = choices,
+      search = TRUE,
+      showValueAsTags = TRUE,
+      updateOn = "close"
+    )
+  )
+}
 
 set_log_level(LOG_INFO)
 

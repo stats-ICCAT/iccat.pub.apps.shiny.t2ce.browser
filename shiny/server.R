@@ -127,8 +127,6 @@ server = function(input, output, session) {
   filter_ce_data_ = function(input = EMPTY_FILTER) {
     filtered = default_filter_data(CE_w, input)
 
-    validate(need(nrow(filtered) > 0, "Current filtering criteria do not identify any valid record!"))
-
     return(filtered)
   }
   
@@ -147,8 +145,6 @@ server = function(input, output, session) {
                                                                 CATCH_UNIT_CODE, 
                                                                 DATASET_TYPE_CODE, 
                                                                 YEAR, YEAR_SHORT)][CATCH > 0]
-    
-    validate(need(nrow(filtered)  > 0, "Current filtering criteria do not identify any valid record!"))
     
     has_years = length(input$years) == 2
     
@@ -211,8 +207,6 @@ server = function(input, output, session) {
                                                                 DATASET_TYPE_CODE, 
                                                                 YEAR, YEAR_SHORT)][CATCH > 0]
     
-    validate(need(nrow(filtered)  > 0,    "Current filtering criteria do not identify any valid record!"))
-    
     has_years = length(input$years) == 2
     
     if(has_years) {
@@ -250,10 +244,30 @@ server = function(input, output, session) {
     return(filtered_w)
   }
 
+  validate_filtering = function(filtered_data) {
+    filtered_rows = nrow(filtered_data)
+    
+    if(filtered_rows == 0) {
+      shinyjs::disable("downloadFiltered")
+      
+      showModal(modalDialog(title  = "No matching records", 
+                            footer = NULL,
+                            easyClose = TRUE,
+                            fade = FALSE,
+                            "Please refine your current filtering criteria!"))
+    } else {
+      shinyjs::enable("downloadFiltered")
+    }
+    
+    #validate(need(filtered_rows > 0, "Current filtering criteria do not identify any valid record!"))
+    
+    return(filtered_data)
+  }
+  
   output$filtered_data =
     renderDataTable({
-      filtered_data = filter_ce_data()
-      
+      filtered_data = validate_filtering(filter_ce_data())
+
       filtered_data$DATASET_ID = NULL
       filtered_data$STRATA_ID = NULL
       filtered_data$FLAG_CODE = NULL
@@ -289,7 +303,7 @@ server = function(input, output, session) {
   
   output$summary_data =
     renderDataTable({
-      filtered_data = filter_summary_data()
+      filtered_data = validate_filtering(filter_summary_data())
       
       filtered_data$FLAG_CODE = NULL
       
@@ -316,8 +330,8 @@ server = function(input, output, session) {
   
   output$detailed_summary_data =
     renderDataTable({
-      filtered_data = filter_detailed_summary_data()
-    
+      filtered_data = validate_filtering(filter_detailed_summary_data())
+      
       filtered_data$FLAG_CODE = NULL
       
       return(
@@ -369,68 +383,56 @@ server = function(input, output, session) {
     
     return(paste0(str_replace_all(META$LAST_UPDATE, "\\-", ""), "_", paste0(components, collapse = "_")))
   }
-
-  output$downloadDataFiltered = downloadHandler(
+  
+  output$downloadFiltered = downloadHandler(
     filename = function() {
-        paste0("ICCAT_T2CE_", get_filename_components(input), ".csv.gz")
-      },
+      dataset = input$dataset
+      
+      if(dataset == TAB_DATA)
+        return(paste0("ICCAT_T2CE_", get_filename_components(input), ".csv.gz"))
+      else if(dataset == TAB_SUMMARY) 
+        return(paste0("ICCAT_T2CE_summary_", get_filename_components(input), ".csv.gz"))
+      else # Detailed summary
+        return(paste0("ICCAT_T2CE_detailed_summary_", get_filename_components(input), ".csv.gz"))
+    },
     content = function(file) {
+      dataset = input$dataset
+      
+      if(dataset == TAB_DATA)
         to_download = filter_ce_data()
+      else if(dataset == TAB_SUMMARY)
+        to_download = filter_summary_data_(input, FALSE)
+      else # Detailed summary
+        to_download = filter_detailed_summary_data_(input, FALSE)
+      
+      write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
+    }
+  )
+  
+  output$downloadAll = downloadHandler(
+    filename = function() {
+      dataset = input$dataset
+      
+      if(dataset == TAB_DATA)
+        return(META$FILENAME)
+      else if(dataset == TAB_SUMMARY) 
+        return(paste0("ICCAT_T2CE_summary_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_full.csv.gz"))
+      else # Detailed summary
+        return(paste0("ICCAT_T2CE_detailed_summary_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_full.csv.gz"))
+    },
+    content = function(file) {
+      dataset = input$dataset
+      
+      if(dataset == "Data")
+        file.copy(paste0("www/", META$FILENAME), file)
+      else {
+        if(dataset == "Summary") 
+          to_download = filter_summary_data_(EMPTY_FILTER, FALSE)
+        else # Detailed summary
+          to_download = filter_detailed_summary_data_(EMPTY_FILTER, FALSE)
         
         write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
-      }
-  )
-  
-  output$downloadDataAll = downloadHandler(
-    filename = function() {
-      return(META$FILENAME)
-    },
-    content = function(file) {
-      file.copy(paste0("www/", META$FILENAME), file)
-    }
-  )
-  
-  output$downloadSummaryFiltered = downloadHandler(
-    filename = function() {
-      paste0("ICCAT_T2CE_summary_", get_filename_components(input), ".csv.gz")
-    },
-    content = function(file) {
-      to_download = filter_summary_data_(input, FALSE)
-      
-      write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
-    }
-  )
-  
-  output$downloadSummaryAll = downloadHandler(
-    filename = function() {
-      return(paste0("ICCAT_T2CE_summary_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_all.csv.gz"))
-    },
-    content = function(file) {
-      to_download = filter_summary_data_(EMPTY_FILTER, FALSE)
-      
-      write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
-    }
-  )
-  
-  output$downloadDetailedSummaryFiltered = downloadHandler(
-    filename = function() {
-      paste0("ICCAT_T2CE_detailed_summary_", get_filename_components(input), ".csv.gz")
-    },
-    content = function(file) {
-      to_download = filter_detailed_summary_data_(input, FALSE)
-      
-      write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
-    }
-  )
-  
-  output$downloadDetailedSummaryAll = downloadHandler(
-    filename = function() {
-      return(paste0("ICCAT_T2CE_detailed_summary_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_all.csv.gz"))
-    },
-    content = function(file) {
-      to_download = filter_detailed_summary_data_(EMPTY_FILTER, FALSE)
-      
-      write.csv(to_download, gzfile(file), row.names = FALSE, na = "")
+      } 
     }
   )
 }

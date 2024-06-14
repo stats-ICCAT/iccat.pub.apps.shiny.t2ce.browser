@@ -2,6 +2,7 @@ ui = function() {
   TITLE = "ICCAT interactive catch-and-effort data browser v1.0"
   return(
     fluidPage(
+      shinyjs::useShinyjs(),
       title = TITLE,
       tags$head(
         tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
@@ -47,148 +48,76 @@ ui = function() {
                              fluidRow(
                                column(
                                  width = 12,
-                                 virtualSelectInput("datasetTypes", "Dataset type(s)",
-                                                    width = "100%",
-                                                    multiple = TRUE,
-                                                    autoSelectFirstOption = FALSE,
-                                                    choices = ALL_DATASET_TYPES,
-                                                    search = TRUE,
-                                                    showValueAsTags = TRUE)
-                                 )
-                               ),
-                               fluidRow(
-                                 column(
-                                   width = 12,
-                                   virtualSelectInput("catchUnits", "Catch unit(s)",
-                                                      width = "100%",
-                                                      multiple = TRUE,
-                                                      autoSelectFirstOption = FALSE,
-                                                      choices = ALL_CATCH_UNITS,
-                                                      search = TRUE,
-                                                      showValueAsTags = TRUE)
-                                 )
-                               ),
-                               fluidRow(
-                                 column(
-                                   width = 12,
-                                   virtualSelectInput("flags", "Flag(s)",
-                                                      width = "100%",
-                                                      multiple = TRUE,
-                                                      autoSelectFirstOption = FALSE,
-                                                      choices = ALL_FLAGS,
-                                                      search = TRUE,
-                                                      showValueAsTags = TRUE)
-                                 )
-                               ),
-                               fluidRow(
-                                 column(
-                                   width = 12,
-                                   virtualSelectInput("gearGroups", "Gear group(s)",
-                                                      width = "100%",
-                                                      multiple = TRUE,
-                                                      autoSelectFirstOption = FALSE,
-                                                      choices = ALL_GEAR_GROUPS,
-                                                      search = TRUE,
-                                                      showValueAsTags = TRUE)
-                                 )
-                               ),
-                               fluidRow(
-                                 column(
-                                   width = 12,
-                                   virtualSelectInput("fishingModes", "Fishing mode(s)",
-                                                      width = "100%",
-                                                      multiple = TRUE,
-                                                      autoSelectFirstOption = FALSE,
-                                                      choices = ALL_FISHING_MODES,
-                                                      search = TRUE,
-                                                      showValueAsTags = TRUE)
-                                 )
-                               ),
-                               fluidRow(
-                                 column(
-                                   width = 12,
-                                   virtualSelectInput("effortTypesI", "Primary effort type(s)",
-                                                      width = "100%",
-                                                      multiple = TRUE,
-                                                      autoSelectFirstOption = FALSE,
-                                                      choices = ALL_EFFORT_TYPES,
-                                                      search = TRUE,
-                                                      showValueAsTags = TRUE)
-                                 )
+                                 UI_select_input("datasetTypes", "Dataset type(s)", ALL_DATASET_TYPES)
                                )
+                             ),
+                             fluidRow(
+                               column(
+                                 width = 12,
+                                 UI_select_input("catchUnits", "Catch unit(s)", ALL_CATCH_UNITS)
+                               )
+                             ),
+                             fluidRow(
+                               column(
+                                 width = 12,
+                                 UI_select_input("flags", "Flag(s)", ALL_FLAGS)
+                               )
+                             ),
+                             fluidRow(
+                               column(
+                                 width = 12,
+                                 UI_select_input("gearGroups", "Gear group(s)", ALL_GEAR_GROUPS)
+                               )
+                             ),
+                             fluidRow(
+                               column(
+                                 width = 12,
+                                 UI_select_input("fishingModes", "Fishing mode(s)", ALL_FISHING_MODES)
+                               )
+                             ),
+                             fluidRow(
+                               column(
+                                 width = 12,
+                                 UI_select_input("effortTypesI", "Primary effort type(s)", ALL_EFFORT_TYPES)
+                               )
+                             )
                     ),
                     tabPanel("Other filters",
                              style = "padding-top: 1em", 
                              fluidRow(
                                column(
                                  width = 12,
-                                 virtualSelectInput("timeGroups", "Time period type(s)",
-                                                    width = "100%",
-                                                    multiple = TRUE,
-                                                    autoSelectFirstOption = FALSE,
-                                                    choices = ALL_TIME_GROUPS,
-                                                    search = TRUE,
-                                                    showValueAsTags = TRUE)
+                                 UI_select_input("timeGroups", "Time period type(s)", ALL_TIME_GROUPS)
                                )
                              ),
                              fluidRow(
                                column(
                                  width = 12,
-                                 virtualSelectInput("timePeriods", "Time period(s)",
-                                                    width = "100%",
-                                                    multiple = TRUE,
-                                                    autoSelectFirstOption = FALSE,
-                                                    choices = ALL_TIME_PERIODS,
-                                                    search = TRUE,
-                                                    showValueAsTags = TRUE)
+                                 UI_select_input("timePeriods", "Time period(s)", ALL_TIME_PERIODS)
                                )
                              ),
                              fluidRow(
                                column(
                                  width = 12,
-                                 virtualSelectInput("squareTypes", "Square type(s)",
-                                                    width = "100%",
-                                                    multiple = TRUE,
-                                                    autoSelectFirstOption = FALSE,
-                                                    choices = ALL_SQUARE_TYPES,
-                                                    search = TRUE,
-                                                    showValueAsTags = TRUE)
+                                 UI_select_input("squareTypes", "Square type(s)", ALL_SQUARE_TYPES)
                                )
                              ),
                              fluidRow(
                                column(
                                  width = 12,
-                                 virtualSelectInput("fleets", "Fleet(s)",
-                                                    width = "100%",
-                                                    multiple = TRUE,
-                                                    autoSelectFirstOption = FALSE,
-                                                    choices = ALL_FLEETS,
-                                                    search = TRUE,
-                                                    showValueAsTags = TRUE)
+                                 UI_select_input("fleets", "Fleet(s)", ALL_FLEETS)
                                )
                              ),
                              fluidRow(
                                column(
                                  width = 12,
-                                 virtualSelectInput("gears", "Gear(s)",
-                                                    width = "100%",
-                                                    multiple = TRUE,
-                                                    autoSelectFirstOption = FALSE,
-                                                    choices = ALL_GEARS,
-                                                    search = TRUE,
-                                                    showValueAsTags = TRUE)
+                                 UI_select_input("gears", "Gear(s)", ALL_GEARS)
                                )
                              ),
                              fluidRow(
                                column(
                                  width = 12,
-                                 virtualSelectInput("effortTypesII", "Secondary effort type(s)",
-                                                    width = "100%",
-                                                    multiple = TRUE,
-                                                    autoSelectFirstOption = FALSE,
-                                                    choices = ALL_EFFORT_TYPES,
-                                                    search = TRUE,
-                                                    showValueAsTags = TRUE)
+                                 UI_select_input("effortTypesII", "Secondary effort type(s)", ALL_EFFORT_TYPES)
                                )
                              )
                     )
@@ -206,57 +135,22 @@ ui = function() {
                 column(
                   width = 12,
                   hr(),
-                  h5(strong("Download (.csv.gz)"))
+                  h5(strong("Download current dataset:"))
                 )
               ),
               fluidRow(
-                div(
-                  style = "margin-top: 1em; font-size: 12px; text-align: center",
-                  column(
-                    width = 4,
-                    strong("Data", style = "vertical-align: -8px")
-                  ), 
-                  column(
-                    width = 4, 
-                    strong("Summary", style = "vertical-align: -8px")
-                  ), 
-                  column(
-                    width = 4, 
-                    strong("Det. summary", style = "vertical-align: -8px")
-                  )
-                )
-              ),
-              fluidRow(
-                div(
-                  style = "margin-top: 1em",
-                  column(
-                    width = 4,
-                    downloadButton("downloadDataFiltered", "Filtered", style = "width: 100px")
-                  ),
-                  column(
-                    width = 4, 
-                    downloadButton("downloadSummaryFiltered", "Filtered", style = "width: 100px")
-                  ),
-                  column(
-                    width = 4, 
-                    downloadButton("downloadDetailedSummaryFiltered", "Filtered", style = "width: 100px")
-                  )
-                )
-              ),
-              fluidRow(
-                div(
-                  style = "margin-top: 1em",
-                  column(
-                    width = 4,
-                    downloadButton("downloadDataAll", "All", style = "width: 100px")
-                  ),
-                  column(
-                    width = 4,
-                    downloadButton("downloadSummaryAll", "All", style = "width: 100px")
-                  ),
-                  column(
-                    width = 4,
-                    downloadButton("downloadDetailedSummaryAll", "All", style = "width: 100px")
+                column(
+                  width = 4,
+                  downloadButton("downloadFiltered", "Filtered", style = "width: 100px")
+                ),
+                column(
+                  width = 4,
+                  downloadButton("downloadFull",     "Full",     style = "width: 100px")
+                ),
+                column(
+                  width = 4,
+                  span("as ", style = "vertical-align: -5px",
+                       code(".csv.gz")
                   )
                 )
               )
@@ -264,16 +158,17 @@ ui = function() {
             column(
               width = 10,
               tabsetPanel(
-                tabPanel("Data",
+                id = "dataset",
+                tabPanel(TAB_DATA,
                          tags$div(id = "filtered_data_container",
                                   dataTableOutput("filtered_data")
                          )
                 ),
-                tabPanel("Summary",
+                tabPanel(TAB_SUMMARY,
                          tags$div(id = "filtered_summary_container",
                                   dataTableOutput("summary_data"))
                 ),
-                tabPanel("Detailed summary",
+                tabPanel(TAB_DETAILED_SUMMARY,
                          tags$div(id = "filtered_detailed_summary_container",
                                   dataTableOutput("detailed_summary_data")
                          )
