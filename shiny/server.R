@@ -176,10 +176,10 @@ server = function(input, output, session) {
       dcast.data.table(
         filtered,
         FLAG_CODE + FLAG_NAME_EN + GEAR_GROUP_CODE + CATCH_UNIT_CODE + DATASET_TYPE_CODE ~ YEAR_SHORT,
-        fun.aggregate = function(v) { return (ifelse(use_symbols, "✅", "1")) },
+        fun.aggregate = function(v) { return (ifelse(use_symbols, UI_DATA_AVAILABLE, CSV_DATA_AVAILABLE)) },
         drop = c(TRUE, FALSE),
         value.var = "CATCH",
-        fill = ifelse(use_symbols, "▢", "")
+        fill = ifelse(use_symbols, UI_DATA_UNAVAILABLE, CSV_DATA_UNAVAILABLE)
       )
     
     return(filtered_w)
@@ -235,10 +235,10 @@ server = function(input, output, session) {
       dcast.data.table(
         filtered,
         FLAG_CODE + FLAG_NAME_EN + FLEET_CODE + GEAR_GROUP_CODE + GEAR_CODE + TIME_PERIOD_TYPE_CODE + SQUARE_TYPE_CODE + PRIMARY_EFFORT_UNIT_CODE + SECONDARY_EFFORT_UNIT_CODE + CATCH_UNIT_CODE + DATASET_TYPE_CODE ~ YEAR_SHORT,
-        fun.aggregate = function(v) { return (ifelse(use_symbols, "✅", "1")) },
+        fun.aggregate = function(v) { return (ifelse(use_symbols, UI_DATA_AVAILABLE, CSV_DATA_AVAILABLE)) },
         drop = c(TRUE, FALSE),
         value.var = "CATCH",
-        fill = ifelse(use_symbols, "▢", "")
+        fill = ifelse(use_symbols, UI_DATA_UNAVAILABLE, CSV_DATA_UNAVAILABLE)
       )
     
     return(filtered_w)

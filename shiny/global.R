@@ -57,6 +57,12 @@ UI_select_input = function(id, label, choices) {
   )
 }
 
+CSV_DATA_AVAILABLE   = "1"
+CSV_DATA_UNAVAILABLE = ""
+
+UI_DATA_AVAILABLE    = "◼"
+UI_DATA_UNAVAILABLE  = "◻"
+
 set_log_level(LOG_INFO)
 
 MIN_YEAR = 1950 #min(CA_ALL$Year)
