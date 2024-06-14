@@ -46,7 +46,6 @@ UI_select_input = function(id, label, choices) {
     virtualSelectInput(
       inputId = id, 
       label = label,
-      selected = NA,
       width = "100%",
       multiple = TRUE,
       autoSelectFirstOption = FALSE,
