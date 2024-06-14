@@ -409,7 +409,7 @@ server = function(input, output, session) {
     }
   )
   
-  output$downloadAll = downloadHandler(
+  output$downloadFull = downloadHandler(
     filename = function() {
       dataset = input$dataset
       
