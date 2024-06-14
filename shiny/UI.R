@@ -127,14 +127,6 @@ ui = function() {
               fluidRow(
                 column(
                   width = 12,
-                  span("Data last updated on:"), 
-                  strong(META$LAST_UPDATE)
-                )
-              ),
-              fluidRow(
-                column(
-                  width = 12,
-                  hr(),
                   h5(strong("Download current dataset:"))
                 )
               ),
@@ -152,6 +144,14 @@ ui = function() {
                   span("as ", style = "vertical-align: -5px",
                        code(".csv.gz")
                   )
+                )
+              ),
+              fluidRow(
+                column(
+                  width = 12,
+                  hr(),
+                  span("Data last updated on:"), 
+                  strong(META$LAST_UPDATE)
                 )
               )
             ),
