@@ -52,7 +52,7 @@ UI_select_input = function(id, label, choices) {
       autoSelectFirstOption = FALSE,
       choices = choices,
       search = TRUE,
-      showValueAsTags = TRUE,
+      showValueAsTags = FALSE,
       updateOn = "close"
     )
   )
