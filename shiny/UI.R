@@ -45,6 +45,7 @@ ui = function() {
                   width = 12,
                   tabsetPanel(
                     tabPanel("Main filters",
+                             icon = icon("filter"),
                              style = "padding-top: 1em", 
                              fluidRow(
                                column(
@@ -84,6 +85,7 @@ ui = function() {
                              )
                     ),
                     tabPanel("Other filters",
+                             icon = icon("filter"),
                              style = "padding-top: 1em", 
                              fluidRow(
                                column(
@@ -128,6 +130,12 @@ ui = function() {
               fluidRow(
                 column(
                   width = 12,
+                  actionButton("resetFilters", "Reset all filters", icon = icon("filter-circle-xmark"))
+                )
+              ),
+              fluidRow(
+                column(
+                  width = 12,
                   h5(strong("Download current dataset:"))
                 )
               ),
@@ -160,16 +168,16 @@ ui = function() {
               width = 10,
               tabsetPanel(
                 id = "dataset",
-                tabPanel(TAB_DATA,
+                tabPanel(TAB_DATA, icon = icon("table-list"),
                          tags$div(id = "filtered_data_container",
                                   dataTableOutput("filtered_data")
                          )
                 ),
-                tabPanel(TAB_SUMMARY,
+                tabPanel(TAB_SUMMARY, icon = icon("rectangle-list"),
                          tags$div(id = "filtered_summary_container",
                                   dataTableOutput("summary_data"))
                 ),
-                tabPanel(TAB_DETAILED_SUMMARY,
+                tabPanel(TAB_DETAILED_SUMMARY, icon = icon("rectangle-list"),
                          tags$div(id = "filtered_detailed_summary_container",
                                   dataTableOutput("detailed_summary_data")
                          )

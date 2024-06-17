@@ -28,11 +28,7 @@ server = function(input, output, session) {
          timePeriods = c()
     )
   
-  filter_ce_data = reactive({
-    return(
-      filter_ce_data_(input)
-    )
-  })
+  observeEvent(input$resetFilters, { session$reload() })
   
   default_filter_data = function(data, input = EMPTY_FILTER) {
     INFO(paste0("Years          : ", paste0(input$years,         collapse = "-")))
@@ -121,6 +117,12 @@ server = function(input, output, session) {
     
     return(filtered)
   }
+  
+  filter_ce_data = reactive({
+    return(
+      filter_ce_data_(input)
+    )
+  })
   
   filter_ce_data_ = function(input = EMPTY_FILTER) {
     filtered = default_filter_data(CE_w, input)
