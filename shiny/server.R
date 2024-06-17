@@ -387,7 +387,7 @@ server = function(input, output, session) {
     
     components = components[which(components != "")]
     
-    return(components, collapse = "_"))
+    return(paste0(components, collapse = "_"))
   }
   
   output$downloadFiltered = downloadHandler(
@@ -397,11 +397,11 @@ server = function(input, output, session) {
       filename_prefix = paste0("ICCAT_T2CE_", serialize_last_update_date())
       
       if(dataset == TAB_DATA)
-        return(filename_prefix, "_",                  get_filename_components(input), ".csv.gz"))
+        return(paste0(filename_prefix, "_",                  get_filename_components(input), ".csv.gz"))
       else if(dataset == TAB_SUMMARY) 
-        return(filename_prefix, "_summary_",          get_filename_components(input), ".csv.gz"))
+        return(paste0(filename_prefix, "_summary_",          get_filename_components(input), ".csv.gz"))
       else # Detailed summary
-        return(filename_prefix, "_detailed_summary_", get_filename_components(input), ".csv.gz"))
+        return(paste0(filename_prefix, "_detailed_summary_", get_filename_components(input), ".csv.gz"))
     },
     content = function(file) {
       dataset = input$dataset
@@ -421,12 +421,14 @@ server = function(input, output, session) {
     filename = function() {
       dataset = input$dataset
       
+      filename_prefix = paste0("ICCAT_T2CE_", serialize_last_update_date())
+      
       if(dataset == TAB_DATA)
-        return(META$FILENAME)
+        return(paste0(filename_prefix, "_full.csv.gz"))
       else if(dataset == TAB_SUMMARY) 
-        return(paste0("ICCAT_T2CE_summary_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_full.csv.gz"))
+        return(paste0(filename_prefix, "_sumamry_full.csv.gz"))
       else # Detailed summary
-        return(paste0("ICCAT_T2CE_detailed_summary_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_full.csv.gz"))
+        return(paste0(filename_prefix, "_summary_detailed_full.csv.gz"))
     },
     content = function(file) {
       dataset = input$dataset
@@ -434,7 +436,7 @@ server = function(input, output, session) {
       if(dataset == TAB_DATA)
         file.copy(paste0("www/", META$FILENAME), file)
       else {
-        if(dataset == "Summary") 
+        if(dataset == TAB_SUMMARY) 
           to_download = filter_summary_data_(EMPTY_FILTER, FALSE)
         else # Detailed summary
           to_download = filter_detailed_summary_data_(EMPTY_FILTER, FALSE)
