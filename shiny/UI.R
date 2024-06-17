@@ -20,6 +20,7 @@ ui = function() {
             column(
               width = 8,
               h2(
+                style = "margin-top: 5px !important",
                 img(src = "iccat-logo.jpg", height = "48px"),
                 span(TITLE)
               )
