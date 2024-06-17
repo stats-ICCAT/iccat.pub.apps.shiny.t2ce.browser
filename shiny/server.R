@@ -1,6 +1,4 @@
 server = function(input, output, session) {
-  INITIAL_NUM_ENTRIES = 50
-  
   SPECIES_ORDERED = c("BFT", "ALB", # Temperate tunas
                       "YFT", "BET", "SKJ", # Tropical tunas
                       "SWO", "BUM", "SAI", "SPF", "WHM", # Billfish
