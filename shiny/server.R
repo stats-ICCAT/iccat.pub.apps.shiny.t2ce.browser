@@ -356,7 +356,13 @@ server = function(input, output, session) {
         )
       )
     })
-  
+
+  serialize_last_update_date = function() {
+    return(
+      str_replace_all(META$LAST_UPDATE, "\\-", "")
+    )
+  }
+
   get_filename_components = function(input) {
     dataset_types = paste0(input$datasetTypes, collapse = "+")
     
@@ -381,19 +387,21 @@ server = function(input, output, session) {
     
     components = components[which(components != "")]
     
-    return(paste0(str_replace_all(META$LAST_UPDATE, "\\-", ""), "_", paste0(components, collapse = "_")))
+    return(components, collapse = "_"))
   }
   
   output$downloadFiltered = downloadHandler(
     filename = function() {
       dataset = input$dataset
+
+      filename_prefix = paste0("ICCAT_T2CE_", serialize_last_update_date())
       
       if(dataset == TAB_DATA)
-        return(paste0("ICCAT_T2CE_", get_filename_components(input), ".csv.gz"))
+        return(filename_prefix, "_",                  get_filename_components(input), ".csv.gz"))
       else if(dataset == TAB_SUMMARY) 
-        return(paste0("ICCAT_T2CE_summary_", get_filename_components(input), ".csv.gz"))
+        return(filename_prefix, "_summary_",          get_filename_components(input), ".csv.gz"))
       else # Detailed summary
-        return(paste0("ICCAT_T2CE_detailed_summary_", get_filename_components(input), ".csv.gz"))
+        return(filename_prefix, "_detailed_summary_", get_filename_components(input), ".csv.gz"))
     },
     content = function(file) {
       dataset = input$dataset
