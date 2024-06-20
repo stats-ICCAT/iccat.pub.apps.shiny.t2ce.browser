@@ -57,7 +57,7 @@ UI_select_input = function(id, label, choices) {
   )
 }
 
-INITIAL_NUM_ENTRIES = 45
+INITIAL_NUM_ENTRIES = 50
 
 CSV_DATA_AVAILABLE   = "1"
 CSV_DATA_UNAVAILABLE = ""
