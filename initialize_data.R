@@ -25,7 +25,7 @@ SPECIES_ORDERED = c("BFT", "ALB", # Temperate tunas
 # Loads the data from dbSTAT
 CE = 
   tabular_query(
-    connection = DB_GIS(server = "ATENEA\\SQL22"),
+    connection = DB_STAT(server = "ICARO\\SQL16"), #DB_GIS(server = "ATENEA\\SQL22"),
     statement = "SELECT * FROM V_T2CE_WEB"
   )
 
@@ -189,7 +189,7 @@ CE$YEAR_SHORT =
     ordered = TRUE
   )
 
-META = list(LAST_UPDATE = "2024-01-31", FILENAME = "ICCAT_T2CE_20240131_full.csv.gz")
+META = list(LAST_UPDATE = "2024-09-10", FILENAME = "ICCAT_T2CE_20240910_full.csv.gz")
 
 save("META", file = "./shiny/META.RData", compress = "gzip")
 save("CE",   file = "./shiny/CE.RData",   compress = "gzip")
