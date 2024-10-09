@@ -1,8 +1,8 @@
 library(devtools)
 
-GITLAB_AUTH_TOKEN = Sys.getenv("GITLAB_AUTH_TOKEN")
+GITHUB_AUTH_TOKEN = Sys.getenv("GITHUB_AUTH_TOKEN")
 
-devtools::install_gitlab("iccat-r-tests/libs/public/iccat.pub.base", auth_token = GITLAB_AUTH_TOKEN, dependencies = FALSE)
-devtools::install_gitlab("iccat-r-tests/libs/public/iccat.pub.data", auth_token = GITLAB_AUTH_TOKEN, dependencies = FALSE)
+devtools::install_github("stats-ICCAT/iccat.pub.base", auth_token = GITHUB_AUTH_TOKEN, dependencies = FALSE)
+devtools::install_github("stats-ICCAT/iccat.pub.data", auth_token = GITHUB_AUTH_TOKEN, dependencies = FALSE)
 
 q(save = "no")
