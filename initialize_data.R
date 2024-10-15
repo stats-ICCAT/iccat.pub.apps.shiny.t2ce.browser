@@ -189,7 +189,7 @@ CE$YEAR_SHORT =
     ordered = TRUE
   )
 
-META = list(LAST_UPDATE = "2024-09-10", FILENAME = "ICCAT_T2CE_20240910_full.csv.gz")
+META = list(LAST_UPDATE = "2024-10-15", FILENAME = "ICCAT_T2CE_20241015_full.csv.gz")
 
 save("META", file = "./shiny/META.RData", compress = "gzip")
 save("CE",   file = "./shiny/CE.RData",   compress = "gzip")
